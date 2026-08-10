@@ -3,7 +3,16 @@
 <head>
   <meta charset="UTF-8">
 
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     html,
     body {
       margin: 0;
@@ -12,6 +21,11 @@
       height: 100%;
       overflow: hidden;
       background: transparent;
+    }
+
+    #rive-container {
+      width: 100%;
+      height: 100%;
     }
 
     #riveCanvas {
@@ -24,14 +38,18 @@
 
 <body>
 
-  <canvas id="riveCanvas"></canvas>
+  <div id="rive-container">
+    <canvas id="riveCanvas"></canvas>
+  </div>
 
-  <script src="https://unpkg.com/@rive-app/webgl2@2"></script>
+  <script src="https://unpkg.com/@rive-app/webgl2"></script>
 
   <script>
     const canvas = document.getElementById("riveCanvas");
+    const container = document.getElementById("rive-container");
 
     const r = new rive.Rive({
+
       src: "https://raw.githubusercontent.com/tokyosaysryu/rive-for-website/main/1-TheProblem.riv",
 
       canvas: canvas,
@@ -41,14 +59,24 @@
       stateMachines: "State Machine 1",
 
       layout: new rive.Layout({
-        fit: rive.Fit.Contain,
-        alignment: rive.Alignment.Center
+        fit: rive.Fit.Layout
       }),
 
       onLoad: () => {
         r.resizeDrawingSurfaceToCanvas();
       }
+
     });
+
+
+    // Watch the actual container size,
+    // not just the browser window.
+    const resizeObserver = new ResizeObserver(() => {
+      r.resizeDrawingSurfaceToCanvas();
+    });
+
+    resizeObserver.observe(container);
+
 
     window.addEventListener("resize", () => {
       r.resizeDrawingSurfaceToCanvas();
