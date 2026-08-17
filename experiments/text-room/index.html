@@ -1,1 +1,1539 @@
+<!doctype html>
+<html lang="en">
 
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Interactive Text Room</title>
+
+
+  <!-- BEBAS NEUE -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <style>
+
+    :root {
+
+      --bg: #0a0a0a;
+      --fg: #f7f7f4;
+
+      --trail-1: #00e5ff;
+      --trail-2: #ff00bd;
+      --trail-3: #b7ff00;
+
+
+      --room-w:
+        clamp(760px, 118vw, 1400px);
+
+      --room-h:
+        clamp(520px, 74vw, 820px);
+
+      --depth:
+        clamp(440px, 58vw, 700px);
+
+    }
+
+
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+
+    html,
+    body {
+
+      margin: 0;
+
+      width: 100%;
+      height: 100%;
+
+      overflow: hidden;
+
+      background: var(--bg);
+
+    }
+
+
+
+    body {
+
+      font-family:
+        "Bebas Neue",
+        sans-serif;
+
+    }
+
+
+
+    /* ============================
+       VIEWPORT
+    ============================ */
+
+    .scene {
+
+      position: relative;
+
+      width: 100vw;
+      height: 100vh;
+
+      min-height: 520px;
+
+      overflow: hidden;
+
+
+      perspective: 860px;
+
+      perspective-origin:
+        50% 50%;
+
+
+      background:
+        var(--bg);
+
+
+      cursor:
+        crosshair;
+
+
+      touch-action:
+        pan-y;
+
+    }
+
+
+
+    /* ============================
+       ROOM
+    ============================ */
+
+    .room {
+
+      position: absolute;
+
+      left: 50%;
+      top: 50%;
+
+
+      width:
+        var(--room-w);
+
+      height:
+        var(--room-h);
+
+
+      transform-style:
+        preserve-3d;
+
+
+      transform:
+
+        translate3d(
+          -50%,
+          -50%,
+          240px
+        )
+
+        rotateX(0deg)
+
+        rotateY(0deg);
+
+
+      will-change:
+        transform;
+
+
+      pointer-events:
+        none;
+
+    }
+
+
+
+    /* ============================
+       ALL WALLS
+    ============================ */
+
+    .face {
+
+      position:
+        absolute;
+
+
+      overflow:
+        hidden;
+
+
+      background:
+        var(--bg);
+
+
+      color:
+        var(--fg);
+
+
+      transform-style:
+        preserve-3d;
+
+
+      backface-visibility:
+        visible;
+
+    }
+
+
+
+    /* FRONT-FACING WALL */
+
+    .back {
+
+      inset: 0;
+
+
+      transform:
+
+        translateZ(
+          calc(
+            var(--depth) * -1
+          )
+        );
+
+    }
+
+
+
+    /* FLOOR */
+
+    .floor {
+
+      left: 0;
+      top: 100%;
+
+
+      width: 100%;
+
+      height:
+        var(--depth);
+
+
+      transform-origin:
+        0 0;
+
+
+      transform:
+
+        translateZ(
+          calc(
+            var(--depth) * -1
+          )
+        )
+
+        rotateX(90deg);
+
+    }
+
+
+
+    /* CEILING */
+
+    .ceiling {
+
+      left: 0;
+      bottom: 100%;
+
+
+      width: 100%;
+
+      height:
+        var(--depth);
+
+
+      transform-origin:
+        0 100%;
+
+
+      transform:
+
+        translateZ(
+          calc(
+            var(--depth) * -1
+          )
+        )
+
+        rotateX(-90deg);
+
+    }
+
+
+
+    /* LEFT WALL */
+
+    .left {
+
+      right: 100%;
+      top: 0;
+
+
+      width:
+        var(--depth);
+
+      height: 100%;
+
+
+      transform-origin:
+        100% 0;
+
+
+      transform:
+
+        translateZ(
+          calc(
+            var(--depth) * -1
+          )
+        )
+
+        rotateY(90deg);
+
+    }
+
+
+
+    /* RIGHT WALL */
+
+    .right {
+
+      left: 100%;
+      top: 0;
+
+
+      width:
+        var(--depth);
+
+      height: 100%;
+
+
+      transform-origin:
+        0 0;
+
+
+      transform:
+
+        translateZ(
+          calc(
+            var(--depth) * -1
+          )
+        )
+
+        rotateY(-90deg);
+
+    }
+
+
+
+    /* ============================
+       TEXT SURFACE
+    ============================ */
+
+    .surface {
+
+      width: 100%;
+      height: 100%;
+
+
+      display:
+        grid;
+
+
+      grid-template-rows:
+        repeat(
+          6,
+          1fr
+        );
+
+
+      overflow:
+        hidden;
+
+
+      background:
+        var(--bg);
+
+    }
+
+
+
+    .text-row {
+
+      display:
+        flex;
+
+
+      align-items:
+        center;
+
+
+      justify-content:
+        center;
+
+
+      gap:
+        0.72em;
+
+
+      min-width:
+        max-content;
+
+
+      white-space:
+        nowrap;
+
+
+      font-size:
+
+        clamp(
+          52px,
+          6.3vw,
+          98px
+        );
+
+
+      line-height:
+        0.82;
+
+
+      letter-spacing:
+        0.015em;
+
+    }
+
+
+
+    /* OFFSET EVERY SECOND ROW */
+
+    .text-row:nth-child(even) {
+
+      transform:
+        translateX(-0.32em);
+
+    }
+
+
+
+    .word-token {
+
+      display:
+        inline-flex;
+
+
+      flex:
+        0 0 auto;
+
+    }
+
+
+
+    /* ============================
+       INDIVIDUAL CHARACTER
+    ============================ */
+
+    .glyph {
+
+      position:
+        relative;
+
+
+      display:
+        grid;
+
+
+      place-items:
+        center;
+
+
+      width:
+        0.56em;
+
+
+      height:
+        1em;
+
+    }
+
+
+
+    .glyph-layer {
+
+      grid-area:
+        1 / 1;
+
+
+      display:
+        block;
+
+
+      line-height:
+        1;
+
+
+      will-change:
+        transform,
+        opacity;
+
+
+      transition:
+
+        transform
+        220ms
+        ease,
+
+        opacity
+        220ms
+        ease;
+
+    }
+
+
+
+    /* FURTHEST TRAIL */
+
+    .trail-3 {
+
+      color:
+        var(--trail-3);
+
+
+      opacity:
+        0.52;
+
+
+      transform:
+
+        translate(
+          -0.12em,
+          0.08em
+        );
+
+    }
+
+
+
+    /* MIDDLE TRAIL */
+
+    .trail-2 {
+
+      color:
+        var(--trail-2);
+
+
+      opacity:
+        0.63;
+
+
+      transform:
+
+        translate(
+          -0.075em,
+          0.05em
+        );
+
+    }
+
+
+
+    /* CLOSEST TRAIL */
+
+    .trail-1 {
+
+      color:
+        var(--trail-1);
+
+
+      opacity:
+        0.76;
+
+
+      transform:
+
+        translate(
+          -0.035em,
+          0.022em
+        );
+
+    }
+
+
+
+    /* MAIN WHITE CHARACTER */
+
+    .front {
+
+      position:
+        relative;
+
+
+      z-index:
+        4;
+
+
+      color:
+        var(--fg);
+
+    }
+
+
+
+    /* ============================
+       VIGNETTE
+    ============================ */
+
+    .vignette {
+
+      position:
+        absolute;
+
+
+      inset:
+        0;
+
+
+      z-index:
+        10;
+
+
+      pointer-events:
+        none;
+
+
+      background:
+
+        radial-gradient(
+
+          circle
+          at center,
+
+          transparent
+          36%,
+
+          rgba(
+            0,
+            0,
+            0,
+            0.18
+          )
+          67%,
+
+          rgba(
+            0,
+            0,
+            0,
+            0.6
+          )
+          100%
+
+        );
+
+    }
+
+
+
+    /* ============================
+       MOBILE
+    ============================ */
+
+    @media
+      (max-width: 700px) {
+
+      :root {
+
+        --room-w:
+          820px;
+
+        --room-h:
+          560px;
+
+        --depth:
+          470px;
+
+      }
+
+
+      .scene {
+
+        min-height:
+          480px;
+
+      }
+
+
+      .text-row {
+
+        font-size:
+          60px;
+
+      }
+
+    }
+
+
+
+    @media
+      (prefers-reduced-motion: reduce) {
+
+      .glyph-layer {
+
+        transition:
+          none;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+
+<body>
+
+
+  <main
+    class="scene"
+    id="scene"
+  >
+
+
+    <div
+      class="room"
+      id="room"
+    >
+
+
+      <!-- BACK WALL -->
+
+      <section
+        class="face back"
+      >
+
+        <div
+          class="surface"
+          data-face="0"
+        ></div>
+
+      </section>
+
+
+
+      <!-- FLOOR -->
+
+      <section
+        class="face floor"
+      >
+
+        <div
+          class="surface"
+          data-face="1"
+        ></div>
+
+      </section>
+
+
+
+      <!-- CEILING -->
+
+      <section
+        class="face ceiling"
+      >
+
+        <div
+          class="surface"
+          data-face="2"
+        ></div>
+
+      </section>
+
+
+
+      <!-- LEFT WALL -->
+
+      <section
+        class="face left"
+      >
+
+        <div
+          class="surface"
+          data-face="3"
+        ></div>
+
+      </section>
+
+
+
+      <!-- RIGHT WALL -->
+
+      <section
+        class="face right"
+      >
+
+        <div
+          class="surface"
+          data-face="4"
+        ></div>
+
+      </section>
+
+
+    </div>
+
+
+    <div
+      class="vignette"
+    ></div>
+
+
+  </main>
+
+
+
+  <script>
+
+
+    /* ============================
+       WORDS
+    ============================ */
+
+    const words = [
+
+      "CREATE",
+
+      "MOTION",
+
+      "DESIGN",
+
+      "EXPLORE",
+
+      "IMAGINE",
+
+      "SYSTEMS"
+
+    ];
+
+
+
+    const scene =
+      document.getElementById(
+        "scene"
+      );
+
+
+    const room =
+      document.getElementById(
+        "room"
+      );
+
+
+    const surfaces =
+      [
+        ...document.querySelectorAll(
+          ".surface"
+        )
+      ];
+
+
+
+    const maxLetters =
+
+      Math.max(
+
+        ...words.map(
+          word =>
+            word.length
+        )
+
+      );
+
+
+
+    const glyphs = [];
+
+
+
+    /* ============================
+       CHARACTER HELPER
+    ============================ */
+
+    function setCharacter(
+      element,
+      character
+    ) {
+
+      element.textContent =
+
+        character ||
+
+        "\u00A0";
+
+    }
+
+
+
+    /* ============================
+       CREATE ONE CHARACTER
+    ============================ */
+
+    function createGlyph(
+
+      character,
+
+      letterIndex,
+
+      rowIndex,
+
+      faceIndex,
+
+      repeatIndex
+
+    ) {
+
+
+      const glyph =
+        document.createElement(
+          "span"
+        );
+
+
+      glyph.className =
+        "glyph";
+
+
+
+      const trail3 =
+        document.createElement(
+          "span"
+        );
+
+
+      trail3.className =
+        "glyph-layer trail-3";
+
+
+
+      const trail2 =
+        document.createElement(
+          "span"
+        );
+
+
+      trail2.className =
+        "glyph-layer trail-2";
+
+
+
+      const trail1 =
+        document.createElement(
+          "span"
+        );
+
+
+      trail1.className =
+        "glyph-layer trail-1";
+
+
+
+      const front =
+        document.createElement(
+          "span"
+        );
+
+
+      front.className =
+        "glyph-layer front";
+
+
+
+      [
+
+        trail3,
+
+        trail2,
+
+        trail1,
+
+        front
+
+      ].forEach(
+        layer => {
+
+          setCharacter(
+            layer,
+            character
+          );
+
+
+          glyph.appendChild(
+            layer
+          );
+
+        }
+      );
+
+
+
+      glyphs.push({
+
+        letterIndex,
+
+        rowIndex,
+
+        faceIndex,
+
+        repeatIndex,
+
+        trail3,
+
+        trail2,
+
+        trail1,
+
+        front
+
+      });
+
+
+
+      return glyph;
+
+    }
+
+
+
+    /* ============================
+       BUILD ROOM TEXT
+    ============================ */
+
+    function buildRoom() {
+
+
+      surfaces.forEach(
+
+        (
+          surface,
+          faceIndex
+        ) => {
+
+
+          for (
+
+            let rowIndex = 0;
+
+            rowIndex < 6;
+
+            rowIndex++
+
+          ) {
+
+
+            const row =
+              document.createElement(
+                "div"
+              );
+
+
+            row.className =
+              "text-row";
+
+
+
+            for (
+
+              let repeatIndex = 0;
+
+              repeatIndex < 6;
+
+              repeatIndex++
+
+            ) {
+
+
+              const token =
+                document.createElement(
+                  "span"
+                );
+
+
+              token.className =
+                "word-token";
+
+
+
+              for (
+
+                let letterIndex = 0;
+
+                letterIndex < maxLetters;
+
+                letterIndex++
+
+              ) {
+
+
+                const character =
+
+                  words[0][
+                    letterIndex
+                  ]
+
+                  ||
+
+                  " ";
+
+
+
+                token.appendChild(
+
+                  createGlyph(
+
+                    character,
+
+                    letterIndex,
+
+                    rowIndex,
+
+                    faceIndex,
+
+                    repeatIndex
+
+                  )
+
+                );
+
+              }
+
+
+
+              row.appendChild(
+                token
+              );
+
+            }
+
+
+
+            surface.appendChild(
+              row
+            );
+
+          }
+
+        }
+
+      );
+
+    }
+
+
+
+    /* ============================
+       CHANGE WORD
+    ============================ */
+
+    function changeWord(
+      word
+    ) {
+
+
+      glyphs.forEach(
+        item => {
+
+
+          const character =
+
+            word[
+              item.letterIndex
+            ]
+
+            ||
+
+            " ";
+
+
+
+          /*
+            CHARACTER STAGGER
+
+            Every letter changes
+            at a slightly different
+            time.
+          */
+
+          const stagger =
+
+            item.letterIndex
+            * 48
+
+            +
+
+            item.rowIndex
+            * 24
+
+            +
+
+            item.faceIndex
+            * 28
+
+            +
+
+            (
+              item.repeatIndex
+              % 2
+            )
+            * 12;
+
+
+
+          /*
+            WHITE LETTER FIRST
+          */
+
+          setTimeout(
+
+            () =>
+              setCharacter(
+                item.front,
+                character
+              ),
+
+            stagger
+
+          );
+
+
+
+          /*
+            COLOURED TRAILS
+            CATCH UP AFTERWARDS
+          */
+
+          setTimeout(
+
+            () =>
+              setCharacter(
+                item.trail1,
+                character
+              ),
+
+            stagger + 55
+
+          );
+
+
+          setTimeout(
+
+            () =>
+              setCharacter(
+                item.trail2,
+                character
+              ),
+
+            stagger + 105
+
+          );
+
+
+          setTimeout(
+
+            () =>
+              setCharacter(
+                item.trail3,
+                character
+              ),
+
+            stagger + 165
+
+          );
+
+        }
+
+      );
+
+    }
+
+
+
+    /* BUILD INITIAL ROOM */
+
+    buildRoom();
+
+
+
+    /* ============================
+       AUTOMATIC WORD CHANGE
+    ============================ */
+
+    let wordIndex = 0;
+
+
+
+    if (
+
+      !window
+        .matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        )
+        .matches
+
+    ) {
+
+
+      setInterval(
+
+        () => {
+
+
+          wordIndex =
+
+            (
+              wordIndex + 1
+            )
+
+            %
+
+            words.length;
+
+
+
+          changeWord(
+
+            words[
+              wordIndex
+            ]
+
+          );
+
+        },
+
+        1900
+
+      );
+
+    }
+
+
+
+    /* ============================
+       MOUSE CAMERA
+    ============================ */
+
+    let targetYaw = 0;
+
+    let targetPitch = 0;
+
+
+    let currentYaw = 0;
+
+    let currentPitch = 0;
+
+
+
+    function updatePointer(
+
+      clientX,
+
+      clientY
+
+    ) {
+
+
+      const rect =
+
+        scene
+          .getBoundingClientRect();
+
+
+
+      const x =
+
+        (
+          (
+            clientX
+            -
+            rect.left
+          )
+
+          /
+
+          rect.width
+
+        )
+
+        * 2
+
+        - 1;
+
+
+
+      const y =
+
+        (
+          (
+            clientY
+            -
+            rect.top
+          )
+
+          /
+
+          rect.height
+
+        )
+
+        * 2
+
+        - 1;
+
+
+
+      /*
+        CHANGE THESE NUMBERS
+        LATER FOR MORE/LESS
+        CAMERA MOVEMENT.
+      */
+
+      targetYaw =
+        x * 8;
+
+
+      targetPitch =
+        -y * 5.5;
+
+    }
+
+
+
+    scene.addEventListener(
+
+      "pointermove",
+
+      event => {
+
+        updatePointer(
+
+          event.clientX,
+
+          event.clientY
+
+        );
+
+      }
+
+    );
+
+
+
+    scene.addEventListener(
+
+      "pointerleave",
+
+      () => {
+
+        targetYaw = 0;
+
+        targetPitch = 0;
+
+      }
+
+    );
+
+
+
+    /* ============================
+       CAMERA SMOOTHING
+    ============================ */
+
+    function animateCamera() {
+
+
+      currentYaw +=
+
+        (
+          targetYaw
+          -
+          currentYaw
+        )
+
+        * 0.065;
+
+
+
+      currentPitch +=
+
+        (
+          targetPitch
+          -
+          currentPitch
+        )
+
+        * 0.065;
+
+
+
+      room.style.transform = `
+
+        translate3d(
+          -50%,
+          -50%,
+          240px
+        )
+
+        rotateX(
+          ${currentPitch}deg
+        )
+
+        rotateY(
+          ${currentYaw}deg
+        )
+
+      `;
+
+
+
+      requestAnimationFrame(
+        animateCamera
+      );
+
+    }
+
+
+
+    animateCamera();
+
+
+  </script>
+
+
+</body>
+
+</html>
