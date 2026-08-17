@@ -43,15 +43,18 @@
       --trail-2: #ff00bd;
       --trail-3: #b7ff00;
 
+      /*
+        Wider and deeper room
+      */
 
       --room-w:
-        clamp(760px, 118vw, 1400px);
+        clamp(900px, 125vw, 1600px);
 
       --room-h:
-        clamp(520px, 74vw, 820px);
+        clamp(600px, 82vw, 980px);
 
       --depth:
-        clamp(440px, 58vw, 700px);
+        clamp(650px, 85vw, 1000px);
 
     }
 
@@ -105,7 +108,12 @@
       overflow: hidden;
 
 
-      perspective: 860px;
+      /*
+        Strong wide-angle perspective.
+        Lower number = wider lens feel.
+      */
+
+      perspective: 420px;
 
       perspective-origin:
         50% 50%;
@@ -154,7 +162,7 @@
         translate3d(
           -50%,
           -50%,
-          240px
+          120px
         )
 
         rotateX(0deg)
@@ -206,7 +214,7 @@
 
 
 
-    /* FRONT-FACING WALL */
+    /* FRONT WALL */
 
     .back {
 
@@ -355,6 +363,8 @@
 
     /* ============================
        TEXT SURFACE
+
+       Exactly 4 words per face.
     ============================ */
 
     .surface {
@@ -363,13 +373,12 @@
       height: 100%;
 
 
-      display:
-        grid;
+      display: grid;
 
 
       grid-template-rows:
         repeat(
-          6,
+          4,
           1fr
         );
 
@@ -387,6 +396,10 @@
 
     .text-row {
 
+      width: 100%;
+      height: 100%;
+
+
       display:
         flex;
 
@@ -399,44 +412,37 @@
         center;
 
 
-      gap:
-        0.72em;
-
-
-      min-width:
-        max-content;
+      overflow:
+        visible;
 
 
       white-space:
         nowrap;
 
 
+      font-family:
+        "Bebas Neue",
+        sans-serif;
+
+
       font-size:
+        120px;
 
-        clamp(
-          52px,
-          6.3vw,
-          98px
-        );
 
+      font-weight:
+        400;
+
+
+      /*
+        Very tight typography
+      */
 
       line-height:
-        0.82;
+        0.78;
 
 
       letter-spacing:
-        0.015em;
-
-    }
-
-
-
-    /* OFFSET EVERY SECOND ROW */
-
-    .text-row:nth-child(even) {
-
-      transform:
-        translateX(-0.32em);
+        -0.035em;
 
     }
 
@@ -450,6 +456,18 @@
 
       flex:
         0 0 auto;
+
+
+      transform-origin:
+        center center;
+
+
+      white-space:
+        nowrap;
+
+
+      will-change:
+        transform;
 
     }
 
@@ -473,12 +491,16 @@
         center;
 
 
+      /*
+        Tighter character spacing
+      */
+
       width:
-        0.56em;
+        0.47em;
 
 
       height:
-        1em;
+        0.84em;
 
     }
 
@@ -495,7 +517,12 @@
 
 
       line-height:
-        1;
+        0.78;
+
+
+      font-family:
+        "Bebas Neue",
+        sans-serif;
 
 
       will-change:
@@ -517,7 +544,9 @@
 
 
 
-    /* FURTHEST TRAIL */
+    /* ============================
+       COLOR TRAILS
+    ============================ */
 
     .trail-3 {
 
@@ -532,15 +561,13 @@
       transform:
 
         translate(
-          -0.12em,
-          0.08em
+          -0.15em,
+          0.09em
         );
 
     }
 
 
-
-    /* MIDDLE TRAIL */
 
     .trail-2 {
 
@@ -549,21 +576,19 @@
 
 
       opacity:
-        0.63;
+        0.64;
 
 
       transform:
 
         translate(
-          -0.075em,
-          0.05em
+          -0.09em,
+          0.055em
         );
 
     }
 
 
-
-    /* CLOSEST TRAIL */
 
     .trail-1 {
 
@@ -572,21 +597,19 @@
 
 
       opacity:
-        0.76;
+        0.78;
 
 
       transform:
 
         translate(
-          -0.035em,
-          0.022em
+          -0.04em,
+          0.025em
         );
 
     }
 
 
-
-    /* MAIN WHITE CHARACTER */
 
     .front {
 
@@ -635,21 +658,21 @@
           at center,
 
           transparent
-          36%,
+          32%,
 
           rgba(
             0,
             0,
             0,
-            0.18
+            0.12
           )
-          67%,
+          58%,
 
           rgba(
             0,
             0,
             0,
-            0.6
+            0.62
           )
           100%
 
@@ -669,13 +692,13 @@
       :root {
 
         --room-w:
-          820px;
+          950px;
 
         --room-h:
-          560px;
+          620px;
 
         --depth:
-          470px;
+          720px;
 
       }
 
@@ -685,13 +708,9 @@
         min-height:
           480px;
 
-      }
 
-
-      .text-row {
-
-        font-size:
-          60px;
+        perspective:
+          360px;
 
       }
 
@@ -732,7 +751,7 @@
     >
 
 
-      <!-- BACK WALL -->
+      <!-- FRONT WALL -->
 
       <section
         class="face back"
@@ -901,7 +920,7 @@
 
 
     /* ============================
-       CREATE ONE CHARACTER
+       CREATE CHARACTER
     ============================ */
 
     function createGlyph(
@@ -912,9 +931,7 @@
 
       rowIndex,
 
-      faceIndex,
-
-      repeatIndex
+      faceIndex
 
     ) {
 
@@ -1010,8 +1027,6 @@
 
         faceIndex,
 
-        repeatIndex,
-
         trail3,
 
         trail2,
@@ -1031,7 +1046,10 @@
 
 
     /* ============================
-       BUILD ROOM TEXT
+       BUILD ROOM
+
+       4 ROWS
+       1 WORD PER ROW
     ============================ */
 
     function buildRoom() {
@@ -1049,7 +1067,7 @@
 
             let rowIndex = 0;
 
-            rowIndex < 6;
+            rowIndex < 4;
 
             rowIndex++
 
@@ -1067,84 +1085,169 @@
 
 
 
+            const token =
+              document.createElement(
+                "span"
+              );
+
+
+            token.className =
+              "word-token";
+
+
+
             for (
 
-              let repeatIndex = 0;
+              let letterIndex = 0;
 
-              repeatIndex < 6;
+              letterIndex < maxLetters;
 
-              repeatIndex++
+              letterIndex++
 
             ) {
 
 
-              const token =
-                document.createElement(
-                  "span"
-                );
+              const character =
 
+                words[0][
+                  letterIndex
+                ]
 
-              token.className =
-                "word-token";
+                ||
 
-
-
-              for (
-
-                let letterIndex = 0;
-
-                letterIndex < maxLetters;
-
-                letterIndex++
-
-              ) {
-
-
-                const character =
-
-                  words[0][
-                    letterIndex
-                  ]
-
-                  ||
-
-                  " ";
+                " ";
 
 
 
-                token.appendChild(
+              token.appendChild(
 
-                  createGlyph(
+                createGlyph(
 
-                    character,
+                  character,
 
-                    letterIndex,
+                  letterIndex,
 
-                    rowIndex,
+                  rowIndex,
 
-                    faceIndex,
+                  faceIndex
 
-                    repeatIndex
+                )
 
-                  )
-
-                );
-
-              }
-
-
-
-              row.appendChild(
-                token
               );
 
             }
 
 
 
+            row.appendChild(
+              token
+            );
+
+
             surface.appendChild(
               row
             );
+
+          }
+
+        }
+
+      );
+
+
+      requestAnimationFrame(
+        fitTypography
+      );
+
+    }
+
+
+
+    /* ============================
+       FIT WORD TO FACE WIDTH
+    ============================ */
+
+    function fitTypography() {
+
+
+      const rows =
+        document.querySelectorAll(
+          ".text-row"
+        );
+
+
+      rows.forEach(
+        row => {
+
+
+          const token =
+            row.querySelector(
+              ".word-token"
+            );
+
+
+          if (!token) return;
+
+
+
+          /*
+            Reset before measuring
+          */
+
+          token.style.transform =
+            "scaleX(1)";
+
+
+
+          /*
+            Size letters based on
+            available row height.
+          */
+
+          const rowHeight =
+            row.clientHeight;
+
+
+          row.style.fontSize =
+            (
+              rowHeight
+              *
+              1.12
+            )
+            +
+            "px";
+
+
+
+          /*
+            Stretch word until it fills
+            around 94% of face width.
+          */
+
+          const naturalWidth =
+            token.scrollWidth;
+
+
+          const availableWidth =
+            row.clientWidth
+            *
+            0.94;
+
+
+
+          if (
+            naturalWidth > 0
+          ) {
+
+
+            const scaleX =
+              availableWidth
+              /
+              naturalWidth;
+
+
+            token.style.transform =
+              `scaleX(${scaleX})`;
 
           }
 
@@ -1182,40 +1285,34 @@
 
 
           /*
-            CHARACTER STAGGER
+            Sequential displacement:
 
-            Every letter changes
-            at a slightly different
-            time.
+            character position
+            +
+            row position
+            +
+            room face position
           */
 
           const stagger =
 
             item.letterIndex
-            * 48
+            * 50
 
             +
 
             item.rowIndex
-            * 24
+            * 85
 
             +
 
             item.faceIndex
-            * 28
-
-            +
-
-            (
-              item.repeatIndex
-              % 2
-            )
-            * 12;
+            * 32;
 
 
 
           /*
-            WHITE LETTER FIRST
+            MAIN WHITE CHARACTER
           */
 
           setTimeout(
@@ -1233,8 +1330,7 @@
 
 
           /*
-            COLOURED TRAILS
-            CATCH UP AFTERWARDS
+            COLOURED TRAILS FOLLOW
           */
 
           setTimeout(
@@ -1258,7 +1354,7 @@
                 character
               ),
 
-            stagger + 105
+            stagger + 110
 
           );
 
@@ -1271,7 +1367,7 @@
                 character
               ),
 
-            stagger + 165
+            stagger + 175
 
           );
 
@@ -1279,13 +1375,55 @@
 
       );
 
+
+      /*
+        Recalculate scaling when words
+        have different character counts.
+      */
+
+      setTimeout(
+
+        () => {
+
+          requestAnimationFrame(
+            fitTypography
+          );
+
+        },
+
+        600
+
+      );
+
     }
 
 
 
-    /* BUILD INITIAL ROOM */
+    /* ============================
+       BUILD INITIAL ROOM
+    ============================ */
 
     buildRoom();
+
+
+
+    /* ============================
+       RESIZE
+    ============================ */
+
+    window.addEventListener(
+
+      "resize",
+
+      () => {
+
+        requestAnimationFrame(
+          fitTypography
+        );
+
+      }
+
+    );
 
 
 
@@ -1335,7 +1473,7 @@
 
         },
 
-        1900
+        2100
 
       );
 
@@ -1344,7 +1482,7 @@
 
 
     /* ============================
-       MOUSE CAMERA
+       MOUSE / POINTER CAMERA
     ============================ */
 
     let targetYaw = 0;
@@ -1417,17 +1555,17 @@
 
 
       /*
-        CHANGE THESE NUMBERS
-        LATER FOR MORE/LESS
-        CAMERA MOVEMENT.
+        Strong enough to feel interactive,
+        but restrained enough to still feel
+        like looking around a room.
       */
 
       targetYaw =
-        x * 8;
+        x * 11;
 
 
       targetPitch =
-        -y * 5.5;
+        -y * 7;
 
     }
 
@@ -1470,7 +1608,7 @@
 
 
     /* ============================
-       CAMERA SMOOTHING
+       SMOOTH CAMERA
     ============================ */
 
     function animateCamera() {
@@ -1484,7 +1622,8 @@
           currentYaw
         )
 
-        * 0.065;
+        *
+        0.065;
 
 
 
@@ -1496,7 +1635,8 @@
           currentPitch
         )
 
-        * 0.065;
+        *
+        0.065;
 
 
 
@@ -1505,7 +1645,7 @@
         translate3d(
           -50%,
           -50%,
-          240px
+          120px
         )
 
         rotateX(
