@@ -12,9 +12,6 @@
 
   <title>Interactive Text Room</title>
 
-
-  <!-- BEBAS NEUE -->
-
   <link
     rel="preconnect"
     href="https://fonts.googleapis.com"
@@ -36,16 +33,12 @@
 
     :root {
 
-      --bg: #0a0a0a;
-      --fg: #f7f7f4;
+      --bg: #080808;
 
-      --trail-1: #00e5ff;
-      --trail-2: #ff00bd;
-      --trail-3: #b7ff00;
+      --white: #ffffff;
 
-      /*
-        Wider and deeper room
-      */
+      --orange: #ff5a00;
+
 
       --room-w:
         clamp(900px, 125vw, 1600px);
@@ -59,11 +52,9 @@
     }
 
 
-
     * {
       box-sizing: border-box;
     }
-
 
 
     html,
@@ -81,7 +72,6 @@
     }
 
 
-
     body {
 
       font-family:
@@ -89,7 +79,6 @@
         sans-serif;
 
     }
-
 
 
     /* ============================
@@ -109,11 +98,10 @@
 
 
       /*
-        Strong wide-angle perspective.
-        Lower number = wider lens feel.
+        Strong wide-angle feel.
       */
 
-      perspective: 420px;
+      perspective: 390px;
 
       perspective-origin:
         50% 50%;
@@ -126,12 +114,7 @@
       cursor:
         crosshair;
 
-
-      touch-action:
-        pan-y;
-
     }
-
 
 
     /* ============================
@@ -162,7 +145,7 @@
         translate3d(
           -50%,
           -50%,
-          120px
+          100px
         )
 
         rotateX(0deg)
@@ -180,27 +163,21 @@
     }
 
 
-
     /* ============================
-       ALL WALLS
+       FACES
     ============================ */
 
     .face {
 
-      position:
-        absolute;
+      position: absolute;
 
-
-      overflow:
-        hidden;
-
+      overflow: hidden;
 
       background:
         var(--bg);
 
-
       color:
-        var(--fg);
+        var(--white);
 
 
       transform-style:
@@ -213,13 +190,11 @@
     }
 
 
-
     /* FRONT WALL */
 
     .back {
 
       inset: 0;
-
 
       transform:
 
@@ -232,14 +207,12 @@
     }
 
 
-
     /* FLOOR */
 
     .floor {
 
       left: 0;
       top: 100%;
-
 
       width: 100%;
 
@@ -264,14 +237,12 @@
     }
 
 
-
     /* CEILING */
 
     .ceiling {
 
       left: 0;
       bottom: 100%;
-
 
       width: 100%;
 
@@ -296,7 +267,6 @@
     }
 
 
-
     /* LEFT WALL */
 
     .left {
@@ -304,11 +274,11 @@
       right: 100%;
       top: 0;
 
-
       width:
         var(--depth);
 
-      height: 100%;
+      height:
+        100%;
 
 
       transform-origin:
@@ -328,7 +298,6 @@
     }
 
 
-
     /* RIGHT WALL */
 
     .right {
@@ -336,11 +305,11 @@
       left: 100%;
       top: 0;
 
-
       width:
         var(--depth);
 
-      height: 100%;
+      height:
+        100%;
 
 
       transform-origin:
@@ -360,11 +329,8 @@
     }
 
 
-
     /* ============================
-       TEXT SURFACE
-
-       Exactly 4 words per face.
+       FOUR WORDS PER FACE
     ============================ */
 
     .surface {
@@ -372,20 +338,12 @@
       width: 100%;
       height: 100%;
 
-
       display: grid;
 
-
       grid-template-rows:
-        repeat(
-          4,
-          1fr
-        );
+        repeat(4, 1fr);
 
-
-      overflow:
-        hidden;
-
+      overflow: hidden;
 
       background:
         var(--bg);
@@ -393,31 +351,19 @@
     }
 
 
-
     .text-row {
 
       width: 100%;
       height: 100%;
 
+      display: flex;
 
-      display:
-        flex;
+      align-items: center;
+      justify-content: center;
 
+      overflow: visible;
 
-      align-items:
-        center;
-
-
-      justify-content:
-        center;
-
-
-      overflow:
-        visible;
-
-
-      white-space:
-        nowrap;
+      white-space: nowrap;
 
 
       font-family:
@@ -425,46 +371,32 @@
         sans-serif;
 
 
-      font-size:
-        120px;
-
-
-      font-weight:
-        400;
-
-
       /*
-        Very tight typography
+        Bebas Neue is actually 400.
+        Stroke makes it visually much heavier.
       */
 
-      line-height:
-        0.78;
+      font-weight: 400;
 
+      font-size: 120px;
 
-      letter-spacing:
-        -0.035em;
+      line-height: 0.76;
+
+      letter-spacing: -0.055em;
 
     }
 
 
-
     .word-token {
 
-      display:
-        inline-flex;
+      display: inline-flex;
 
-
-      flex:
-        0 0 auto;
-
+      flex: 0 0 auto;
 
       transform-origin:
         center center;
 
-
-      white-space:
-        nowrap;
-
+      white-space: nowrap;
 
       will-change:
         transform;
@@ -472,38 +404,28 @@
     }
 
 
-
     /* ============================
-       INDIVIDUAL CHARACTER
+       LETTER
     ============================ */
 
     .glyph {
 
-      position:
-        relative;
+      position: relative;
 
+      display: grid;
 
-      display:
-        grid;
-
-
-      place-items:
-        center;
+      place-items: center;
 
 
       /*
-        Tighter character spacing
+        Tight character widths.
       */
 
-      width:
-        0.47em;
+      width: 0.455em;
 
-
-      height:
-        0.84em;
+      height: 0.84em;
 
     }
-
 
 
     .glyph-layer {
@@ -512,12 +434,7 @@
         1 / 1;
 
 
-      display:
-        block;
-
-
-      line-height:
-        0.78;
+      display: block;
 
 
       font-family:
@@ -525,107 +442,76 @@
         sans-serif;
 
 
+      font-weight: 400;
+
+
+      line-height: 0.76;
+
+
+      /*
+        Fake heavier Bebas.
+      */
+
+      -webkit-text-stroke:
+        1.35px currentColor;
+
+
+      paint-order:
+        stroke fill;
+
+
       will-change:
-        transform,
         opacity;
 
-
-      transition:
-
-        transform
-        220ms
-        ease,
-
-        opacity
-        220ms
-        ease;
-
     }
-
 
 
     /* ============================
-       COLOR TRAILS
+       ORANGE TRAIL
+
+       IMPORTANT:
+       Exact same position as white.
+
+       When both show the same letter,
+       orange is completely hidden.
+
+       During the transition, orange
+       temporarily shows the previous
+       character behind the new white one.
     ============================ */
 
-    .trail-3 {
+    .trail {
 
       color:
-        var(--trail-3);
+        var(--orange);
+
+
+      z-index:
+        1;
 
 
       opacity:
-        0.52;
-
-
-      transform:
-
-        translate(
-          -0.15em,
-          0.09em
-        );
+        1;
 
     }
 
 
-
-    .trail-2 {
-
-      color:
-        var(--trail-2);
-
-
-      opacity:
-        0.64;
-
-
-      transform:
-
-        translate(
-          -0.09em,
-          0.055em
-        );
-
-    }
-
-
-
-    .trail-1 {
-
-      color:
-        var(--trail-1);
-
-
-      opacity:
-        0.78;
-
-
-      transform:
-
-        translate(
-          -0.04em,
-          0.025em
-        );
-
-    }
-
-
+    /* WHITE FRONT LETTER */
 
     .front {
+
+      color:
+        var(--white);
+
 
       position:
         relative;
 
 
       z-index:
-        4;
-
-
-      color:
-        var(--fg);
+        2;
 
     }
-
 
 
     /* ============================
@@ -634,37 +520,28 @@
 
     .vignette {
 
-      position:
-        absolute;
+      position: absolute;
 
+      inset: 0;
 
-      inset:
-        0;
+      z-index: 10;
 
-
-      z-index:
-        10;
-
-
-      pointer-events:
-        none;
+      pointer-events: none;
 
 
       background:
 
         radial-gradient(
 
-          circle
-          at center,
+          circle at center,
 
-          transparent
-          32%,
+          transparent 28%,
 
           rgba(
             0,
             0,
             0,
-            0.12
+            0.08
           )
           58%,
 
@@ -672,14 +549,13 @@
             0,
             0,
             0,
-            0.62
+            0.58
           )
           100%
 
         );
 
     }
-
 
 
     /* ============================
@@ -705,30 +581,13 @@
 
       .scene {
 
-        min-height:
-          480px;
-
-
         perspective:
-          360px;
+          340px;
 
       }
 
     }
 
-
-
-    @media
-      (prefers-reduced-motion: reduce) {
-
-      .glyph-layer {
-
-        transition:
-          none;
-
-      }
-
-    }
 
   </style>
 
@@ -765,7 +624,6 @@
       </section>
 
 
-
       <!-- FLOOR -->
 
       <section
@@ -778,7 +636,6 @@
         ></div>
 
       </section>
-
 
 
       <!-- CEILING -->
@@ -795,7 +652,6 @@
       </section>
 
 
-
       <!-- LEFT WALL -->
 
       <section
@@ -808,7 +664,6 @@
         ></div>
 
       </section>
-
 
 
       <!-- RIGHT WALL -->
@@ -861,7 +716,6 @@
     ];
 
 
-
     const scene =
       document.getElementById(
         "scene"
@@ -874,13 +728,13 @@
       );
 
 
-    const surfaces =
-      [
-        ...document.querySelectorAll(
-          ".surface"
-        )
-      ];
+    const surfaces = [
 
+      ...document.querySelectorAll(
+        ".surface"
+      )
+
+    ];
 
 
     const maxLetters =
@@ -893,7 +747,6 @@
         )
 
       );
-
 
 
     const glyphs = [];
@@ -920,7 +773,7 @@
 
 
     /* ============================
-       CREATE CHARACTER
+       CREATE LETTER
     ============================ */
 
     function createGlyph(
@@ -947,38 +800,20 @@
 
 
 
-      const trail3 =
+      /* ORANGE BACK CHARACTER */
+
+      const trail =
         document.createElement(
           "span"
         );
 
 
-      trail3.className =
-        "glyph-layer trail-3";
+      trail.className =
+        "glyph-layer trail";
 
 
 
-      const trail2 =
-        document.createElement(
-          "span"
-        );
-
-
-      trail2.className =
-        "glyph-layer trail-2";
-
-
-
-      const trail1 =
-        document.createElement(
-          "span"
-        );
-
-
-      trail1.className =
-        "glyph-layer trail-1";
-
-
+      /* WHITE FRONT CHARACTER */
 
       const front =
         document.createElement(
@@ -991,32 +826,34 @@
 
 
 
-      [
-
-        trail3,
-
-        trail2,
-
-        trail1,
-
-        front
-
-      ].forEach(
-        layer => {
-
-          setCharacter(
-            layer,
-            character
-          );
-
-
-          glyph.appendChild(
-            layer
-          );
-
-        }
+      setCharacter(
+        trail,
+        character
       );
 
+
+      setCharacter(
+        front,
+        character
+      );
+
+
+      /*
+        Orange FIRST,
+        white SECOND.
+
+        White therefore completely
+        covers orange when identical.
+      */
+
+      glyph.appendChild(
+        trail
+      );
+
+
+      glyph.appendChild(
+        front
+      );
 
 
       glyphs.push({
@@ -1027,16 +864,11 @@
 
         faceIndex,
 
-        trail3,
-
-        trail2,
-
-        trail1,
+        trail,
 
         front
 
       });
-
 
 
       return glyph;
@@ -1047,9 +879,6 @@
 
     /* ============================
        BUILD ROOM
-
-       4 ROWS
-       1 WORD PER ROW
     ============================ */
 
     function buildRoom() {
@@ -1062,6 +891,10 @@
           faceIndex
         ) => {
 
+
+          /*
+            EXACTLY FOUR WORDS
+          */
 
           for (
 
@@ -1138,7 +971,6 @@
             }
 
 
-
             row.appendChild(
               token
             );
@@ -1164,7 +996,7 @@
 
 
     /* ============================
-       FIT WORD TO FACE WIDTH
+       FIT WORD TO FACE
     ============================ */
 
     function fitTypography() {
@@ -1190,48 +1022,47 @@
 
 
 
-          /*
-            Reset before measuring
-          */
-
           token.style.transform =
             "scaleX(1)";
 
 
 
-          /*
-            Size letters based on
-            available row height.
-          */
-
           const rowHeight =
             row.clientHeight;
 
 
+
+          /*
+            Larger vertically than
+            previous version.
+          */
+
           row.style.fontSize =
+
             (
               rowHeight
               *
-              1.12
+              1.22
             )
+
             +
             "px";
 
 
 
-          /*
-            Stretch word until it fills
-            around 94% of face width.
-          */
-
           const naturalWidth =
             token.scrollWidth;
 
 
+          /*
+            Fill essentially the
+            complete wall width.
+          */
+
           const availableWidth =
             row.clientWidth
             *
-            0.94;
+            0.985;
 
 
 
@@ -1241,12 +1072,17 @@
 
 
             const scaleX =
+
               availableWidth
+
               /
+
               naturalWidth;
 
 
+
             token.style.transform =
+
               `scaleX(${scaleX})`;
 
           }
@@ -1260,7 +1096,7 @@
 
 
     /* ============================
-       CHANGE WORD
+       WORD CHANGE
     ============================ */
 
     function changeWord(
@@ -1285,43 +1121,49 @@
 
 
           /*
-            Sequential displacement:
-
-            character position
-            +
-            row position
-            +
-            room face position
+            Temporal displacement
+            across characters,
+            rows and surfaces.
           */
 
           const stagger =
 
             item.letterIndex
-            * 50
+            * 42
 
             +
 
             item.rowIndex
-            * 85
+            * 90
 
             +
 
             item.faceIndex
-            * 32;
+            * 28;
 
 
 
           /*
-            MAIN WHITE CHARACTER
+            WHITE CHARACTER CHANGES FIRST.
+
+            Orange still contains the OLD
+            character underneath it.
+
+            Parts of that old orange letter
+            become visible around the new
+            white letter shape.
           */
 
           setTimeout(
 
-            () =>
+            () => {
+
               setCharacter(
                 item.front,
                 character
-              ),
+              );
+
+            },
 
             stagger
 
@@ -1330,44 +1172,25 @@
 
 
           /*
-            COLOURED TRAILS FOLLOW
+            ORANGE CATCHES UP AFTERWARD.
+
+            Once both characters match again,
+            orange disappears completely
+            behind white.
           */
 
           setTimeout(
 
-            () =>
+            () => {
+
               setCharacter(
-                item.trail1,
+                item.trail,
                 character
-              ),
+              );
 
-            stagger + 55
+            },
 
-          );
-
-
-          setTimeout(
-
-            () =>
-              setCharacter(
-                item.trail2,
-                character
-              ),
-
-            stagger + 110
-
-          );
-
-
-          setTimeout(
-
-            () =>
-              setCharacter(
-                item.trail3,
-                character
-              ),
-
-            stagger + 175
+            stagger + 150
 
           );
 
@@ -1376,9 +1199,10 @@
       );
 
 
+
       /*
-        Recalculate scaling when words
-        have different character counts.
+        Refit typography after
+        different length words.
       */
 
       setTimeout(
@@ -1391,7 +1215,7 @@
 
         },
 
-        600
+        650
 
       );
 
@@ -1400,16 +1224,12 @@
 
 
     /* ============================
-       BUILD INITIAL ROOM
+       INITIAL BUILD
     ============================ */
 
     buildRoom();
 
 
-
-    /* ============================
-       RESIZE
-    ============================ */
 
     window.addEventListener(
 
@@ -1428,80 +1248,60 @@
 
 
     /* ============================
-       AUTOMATIC WORD CHANGE
+       AUTOMATIC WORD CHANGES
     ============================ */
 
     let wordIndex = 0;
 
 
+    setInterval(
 
-    if (
-
-      !window
-        .matchMedia(
-          "(prefers-reduced-motion: reduce)"
-        )
-        .matches
-
-    ) {
+      () => {
 
 
-      setInterval(
+        wordIndex =
 
-        () => {
+          (
+            wordIndex + 1
+          )
 
+          %
 
-          wordIndex =
-
-            (
-              wordIndex + 1
-            )
-
-            %
-
-            words.length;
+          words.length;
 
 
 
-          changeWord(
+        changeWord(
 
-            words[
-              wordIndex
-            ]
+          words[
+            wordIndex
+          ]
 
-          );
+        );
 
-        },
+      },
 
-        2100
+      2100
 
-      );
-
-    }
+    );
 
 
 
     /* ============================
-       MOUSE / POINTER CAMERA
+       CURSOR CAMERA
+
+       DIRECT mapping.
+
+       No easing/inertia.
+
+       The front wall therefore
+       follows cursor movement
+       immediately.
     ============================ */
 
-    let targetYaw = 0;
-
-    let targetPitch = 0;
-
-
-    let currentYaw = 0;
-
-    let currentPitch = 0;
-
-
-
-    function updatePointer(
-
+    function moveCamera(
       clientX,
-
       clientY
-
     ) {
 
 
@@ -1511,6 +1311,14 @@
           .getBoundingClientRect();
 
 
+
+      /*
+        Convert pointer to:
+
+        -1 → left/top
+         0 → center
+        +1 → right/bottom
+      */
 
       const x =
 
@@ -1555,17 +1363,39 @@
 
 
       /*
-        Strong enough to feel interactive,
-        but restrained enough to still feel
-        like looking around a room.
+        More exaggerated angles.
+
+        Increase these later if you
+        want an even more aggressive
+        fisheye feeling.
       */
 
-      targetYaw =
-        x * 11;
+      const yaw =
+        x * 19;
 
 
-      targetPitch =
-        -y * 7;
+      const pitch =
+        -y * 13;
+
+
+
+      room.style.transform = `
+
+        translate3d(
+          -50%,
+          -50%,
+          100px
+        )
+
+        rotateX(
+          ${pitch}deg
+        )
+
+        rotateY(
+          ${yaw}deg
+        )
+
+      `;
 
     }
 
@@ -1577,7 +1407,7 @@
 
       event => {
 
-        updatePointer(
+        moveCamera(
 
           event.clientX,
 
@@ -1591,84 +1421,53 @@
 
 
 
+    /*
+      Return to centre when cursor
+      leaves the experiment.
+    */
+
     scene.addEventListener(
 
       "pointerleave",
 
       () => {
 
-        targetYaw = 0;
 
-        targetPitch = 0;
+        room.style.transition =
+          "transform 500ms cubic-bezier(0.22, 1, 0.36, 1)";
+
+
+        room.style.transform = `
+
+          translate3d(
+            -50%,
+            -50%,
+            100px
+          )
+
+          rotateX(0deg)
+
+          rotateY(0deg)
+
+        `;
+
+
+        setTimeout(
+
+          () => {
+
+            room.style.transition =
+              "none";
+
+          },
+
+          500
+
+        );
 
       }
 
     );
-
-
-
-    /* ============================
-       SMOOTH CAMERA
-    ============================ */
-
-    function animateCamera() {
-
-
-      currentYaw +=
-
-        (
-          targetYaw
-          -
-          currentYaw
-        )
-
-        *
-        0.065;
-
-
-
-      currentPitch +=
-
-        (
-          targetPitch
-          -
-          currentPitch
-        )
-
-        *
-        0.065;
-
-
-
-      room.style.transform = `
-
-        translate3d(
-          -50%,
-          -50%,
-          120px
-        )
-
-        rotateX(
-          ${currentPitch}deg
-        )
-
-        rotateY(
-          ${currentYaw}deg
-        )
-
-      `;
-
-
-
-      requestAnimationFrame(
-        animateCamera
-      );
-
-    }
-
-
-
-    animateCamera();
 
 
   </script>
