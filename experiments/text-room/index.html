@@ -3,593 +3,628 @@
 
 <head>
 
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-  <title>Interactive Text Room</title>
+<title>Interactive Type Room</title>
 
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  >
 
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
+<link
+  rel="preconnect"
+  href="https://fonts.googleapis.com"
+>
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
-    rel="stylesheet"
-  >
+<link
+  rel="preconnect"
+  href="https://fonts.gstatic.com"
+  crossorigin
+>
 
+<link
+  href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+  rel="stylesheet"
+>
 
-  <style>
 
-    :root {
+<style>
 
-      --bg: #080808;
+:root {
 
-      --white: #ffffff;
+  --black: #050505;
+  --white: #f4f0e8;
+  --orange: #ff4b00;
 
-      --orange: #ff5a00;
+  --room-width: 1200px;
+  --room-height: 780px;
 
+  --depth: 900px;
 
-      --room-w:
-        clamp(900px, 125vw, 1600px);
+}
 
-      --room-h:
-        clamp(600px, 82vw, 980px);
 
-      --depth:
-        clamp(650px, 85vw, 1000px);
+/* =================================
+   BASE
+================================= */
 
-    }
+* {
+  box-sizing: border-box;
+}
 
 
-    * {
-      box-sizing: border-box;
-    }
+html,
+body {
 
+  width: 100%;
+  height: 100%;
 
-    html,
-    body {
+  margin: 0;
 
-      margin: 0;
+  overflow: hidden;
 
-      width: 100%;
-      height: 100%;
+  background: var(--black);
 
-      overflow: hidden;
+}
 
-      background: var(--bg);
 
-    }
+body {
 
+  font-family:
+    "Bebas Neue",
+    sans-serif;
 
-    body {
+}
 
-      font-family:
-        "Bebas Neue",
-        sans-serif;
 
-    }
+/* =================================
+   CAMERA / SCENE
+================================= */
 
+.scene {
 
-    /* ============================
-       VIEWPORT
-    ============================ */
+  position: relative;
 
-    .scene {
+  width: 100vw;
+  height: 100vh;
 
-      position: relative;
+  overflow: hidden;
 
-      width: 100vw;
-      height: 100vh;
+  background:
+    var(--black);
 
-      min-height: 520px;
 
-      overflow: hidden;
+  /*
+    Very wide-angle lens feel.
+  */
 
+  perspective: 330px;
 
-      /*
-        Strong wide-angle feel.
-      */
+  perspective-origin:
+    50% 50%;
 
-      perspective: 390px;
 
-      perspective-origin:
-        50% 50%;
+  cursor: crosshair;
 
+}
 
-      background:
-        var(--bg);
 
+/* =================================
+   ROOM
+================================= */
 
-      cursor:
-        crosshair;
+.room {
 
-    }
+  position: absolute;
 
+  left: 50%;
+  top: 50%;
 
-    /* ============================
-       ROOM
-    ============================ */
 
-    .room {
+  width:
+    var(--room-width);
 
-      position: absolute;
+  height:
+    var(--room-height);
 
-      left: 50%;
-      top: 50%;
 
+  transform-style:
+    preserve-3d;
 
-      width:
-        var(--room-w);
 
-      height:
-        var(--room-h);
+  transform:
 
+    translate3d(
+      -50%,
+      -50%,
+      80px
+    )
 
-      transform-style:
-        preserve-3d;
+    rotateX(0deg)
 
+    rotateY(0deg);
 
-      transform:
 
-        translate3d(
-          -50%,
-          -50%,
-          100px
-        )
+  will-change:
+    transform;
 
-        rotateX(0deg)
+}
 
-        rotateY(0deg);
 
+/* =================================
+   FACES
+================================= */
 
-      will-change:
-        transform;
+.face {
 
+  position: absolute;
 
-      pointer-events:
-        none;
+  overflow: hidden;
 
-    }
+  background:
+    var(--black);
 
+  transform-style:
+    preserve-3d;
 
-    /* ============================
-       FACES
-    ============================ */
+  backface-visibility:
+    visible;
 
-    .face {
+}
 
-      position: absolute;
 
-      overflow: hidden;
+/* BACK / FRONT-FACING WALL */
 
-      background:
-        var(--bg);
+.back {
 
-      color:
-        var(--white);
+  inset: 0;
 
+  transform:
 
-      transform-style:
-        preserve-3d;
+    translateZ(
+      calc(
+        var(--depth) * -1
+      )
+    );
 
+}
 
-      backface-visibility:
-        visible;
 
-    }
+/* FLOOR */
 
+.floor {
 
-    /* FRONT WALL */
+  top: 100%;
+  left: 0;
 
-    .back {
+  width: 100%;
 
-      inset: 0;
+  height:
+    var(--depth);
 
-      transform:
 
-        translateZ(
-          calc(
-            var(--depth) * -1
-          )
-        );
+  transform-origin:
+    0 0;
 
-    }
 
+  transform:
 
-    /* FLOOR */
+    translateZ(
+      calc(
+        var(--depth) * -1
+      )
+    )
 
-    .floor {
+    rotateX(90deg);
 
-      left: 0;
-      top: 100%;
+}
 
-      width: 100%;
 
-      height:
-        var(--depth);
+/* CEILING */
 
+.ceiling {
 
-      transform-origin:
-        0 0;
+  bottom: 100%;
+  left: 0;
 
+  width: 100%;
 
-      transform:
+  height:
+    var(--depth);
 
-        translateZ(
-          calc(
-            var(--depth) * -1
-          )
-        )
 
-        rotateX(90deg);
+  transform-origin:
+    0 100%;
 
-    }
 
+  transform:
 
-    /* CEILING */
+    translateZ(
+      calc(
+        var(--depth) * -1
+      )
+    )
 
-    .ceiling {
+    rotateX(-90deg);
 
-      left: 0;
-      bottom: 100%;
+}
 
-      width: 100%;
 
-      height:
-        var(--depth);
+/* LEFT WALL */
 
+.left {
 
-      transform-origin:
-        0 100%;
+  right: 100%;
+  top: 0;
 
+  width:
+    var(--depth);
 
-      transform:
+  height: 100%;
 
-        translateZ(
-          calc(
-            var(--depth) * -1
-          )
-        )
 
-        rotateX(-90deg);
+  transform-origin:
+    100% 0;
 
-    }
 
+  transform:
 
-    /* LEFT WALL */
+    translateZ(
+      calc(
+        var(--depth) * -1
+      )
+    )
 
-    .left {
+    rotateY(90deg);
 
-      right: 100%;
-      top: 0;
+}
 
-      width:
-        var(--depth);
 
-      height:
-        100%;
+/* RIGHT WALL */
 
+.right {
 
-      transform-origin:
-        100% 0;
+  left: 100%;
+  top: 0;
 
+  width:
+    var(--depth);
 
-      transform:
+  height: 100%;
 
-        translateZ(
-          calc(
-            var(--depth) * -1
-          )
-        )
 
-        rotateY(90deg);
+  transform-origin:
+    0 0;
 
-    }
 
+  transform:
 
-    /* RIGHT WALL */
+    translateZ(
+      calc(
+        var(--depth) * -1
+      )
+    )
 
-    .right {
+    rotateY(-90deg);
 
-      left: 100%;
-      top: 0;
+}
 
-      width:
-        var(--depth);
 
-      height:
-        100%;
+/* =================================
+   TEXT SURFACE
+================================= */
 
+.surface {
 
-      transform-origin:
-        0 0;
+  width: 100%;
+  height: 100%;
 
+  display: grid;
 
-      transform:
+  grid-template-rows:
+    repeat(4, 1fr);
 
-        translateZ(
-          calc(
-            var(--depth) * -1
-          )
-        )
+  background:
+    var(--black);
 
-        rotateY(-90deg);
+  overflow: hidden;
 
-    }
+}
 
 
-    /* ============================
-       FOUR WORDS PER FACE
-    ============================ */
+/* =================================
+   WORD ROW
+================================= */
 
-    .surface {
+.text-row {
 
-      width: 100%;
-      height: 100%;
+  position: relative;
 
-      display: grid;
+  width: 100%;
+  height: 100%;
 
-      grid-template-rows:
-        repeat(4, 1fr);
 
-      overflow: hidden;
+  display: flex;
 
-      background:
-        var(--bg);
+  justify-content: center;
+  align-items: center;
 
-    }
 
+  overflow: hidden;
 
-    .text-row {
 
-      width: 100%;
-      height: 100%;
+  font-family:
+    "Bebas Neue",
+    sans-serif;
 
-      display: flex;
 
-      align-items: center;
-      justify-content: center;
+  font-size:
+    180px;
 
-      overflow: visible;
 
-      white-space: nowrap;
+  font-weight:
+    400;
 
 
-      font-family:
-        "Bebas Neue",
-        sans-serif;
+  line-height:
+    0.72;
 
 
-      /*
-        Bebas Neue is actually 400.
-        Stroke makes it visually much heavier.
-      */
+  letter-spacing:
+    -0.075em;
 
-      font-weight: 400;
+}
 
-      font-size: 120px;
 
-      line-height: 0.76;
+/* =================================
+   WORD
+================================= */
 
-      letter-spacing: -0.055em;
+.word {
 
-    }
+  position: relative;
 
+  display: inline-flex;
 
-    .word-token {
+  transform-origin:
+    center;
 
-      display: inline-flex;
 
-      flex: 0 0 auto;
+  /*
+    Makes Bebas feel much wider
+    and heavier.
+  */
 
-      transform-origin:
-        center center;
+  transform:
+    scaleX(1.15);
 
-      white-space: nowrap;
 
-      will-change:
-        transform;
+  white-space:
+    nowrap;
 
-    }
+}
 
 
-    /* ============================
-       LETTER
-    ============================ */
+/* =================================
+   GLYPH
+================================= */
 
-    .glyph {
+.glyph {
 
-      position: relative;
+  position: relative;
 
-      display: grid;
+  display: grid;
 
-      place-items: center;
+  place-items: center;
 
 
-      /*
-        Tight character widths.
-      */
+  width:
+    0.455em;
 
-      width: 0.455em;
 
-      height: 0.84em;
+  height:
+    0.8em;
 
-    }
 
+  overflow:
+    visible;
 
-    .glyph-layer {
+}
 
-      grid-area:
-        1 / 1;
 
+.glyph-layer {
 
-      display: block;
+  grid-area:
+    1 / 1;
 
 
-      font-family:
-        "Bebas Neue",
-        sans-serif;
+  font-family:
+    "Bebas Neue",
+    sans-serif;
 
 
-      font-weight: 400;
+  line-height:
+    0.72;
 
 
-      line-height: 0.76;
+  /*
+    Fake heavier weight.
+  */
 
+  -webkit-text-stroke:
+    2px currentColor;
 
-      /*
-        Fake heavier Bebas.
-      */
 
-      -webkit-text-stroke:
-        1.35px currentColor;
+  paint-order:
+    stroke fill;
 
 
-      paint-order:
-        stroke fill;
+  will-change:
+    transform,
+    opacity,
+    filter;
 
+}
 
-      will-change:
-        opacity;
 
-    }
+/* =================================
+   ORANGE ECHO
+================================= */
 
+.echo {
 
-    /* ============================
-       ORANGE TRAIL
+  color:
+    var(--orange);
 
-       IMPORTANT:
-       Exact same position as white.
 
-       When both show the same letter,
-       orange is completely hidden.
+  z-index:
+    1;
 
-       During the transition, orange
-       temporarily shows the previous
-       character behind the new white one.
-    ============================ */
 
-    .trail {
+  /*
+    Normally perfectly hidden
+    underneath white.
+  */
 
-      color:
-        var(--orange);
+  transform:
+    translate3d(
+      0,
+      0,
+      0
+    );
 
 
-      z-index:
-        1;
+  filter:
+    blur(0px);
 
+}
 
-      opacity:
-        1;
 
-    }
+/* =================================
+   WHITE LETTER
+================================= */
 
+.front {
 
-    /* WHITE FRONT LETTER */
+  position: relative;
 
-    .front {
+  z-index:
+    2;
 
-      color:
-        var(--white);
 
+  color:
+    var(--white);
 
-      position:
-        relative;
+}
 
 
-      z-index:
-        2;
+/* =================================
+   ACTIVE MOTION ECHO
+================================= */
 
-    }
+.glyph.motion .echo {
 
+  /*
+    Orange shoots out from behind
+    the white glyph during transition.
+  */
 
-    /* ============================
-       VIGNETTE
-    ============================ */
+  transform:
 
-    .vignette {
+    translate3d(
+      -0.13em,
+      0.025em,
+      0
+    )
 
-      position: absolute;
+    scaleX(1.12);
 
-      inset: 0;
 
-      z-index: 10;
+  filter:
+    blur(2px);
 
-      pointer-events: none;
+}
 
 
-      background:
+/* =================================
+   EDGE DARKENING
+================================= */
 
-        radial-gradient(
+.vignette {
 
-          circle at center,
+  position: absolute;
 
-          transparent 28%,
+  inset: 0;
 
-          rgba(
-            0,
-            0,
-            0,
-            0.08
-          )
-          58%,
+  z-index: 20;
 
-          rgba(
-            0,
-            0,
-            0,
-            0.58
-          )
-          100%
+  pointer-events: none;
 
-        );
 
-    }
+  background:
 
+    radial-gradient(
 
-    /* ============================
-       MOBILE
-    ============================ */
+      ellipse
+      at center,
 
-    @media
-      (max-width: 700px) {
+      transparent
+      34%,
 
-      :root {
+      rgba(
+        0,
+        0,
+        0,
+        0.08
+      )
+      58%,
 
-        --room-w:
-          950px;
+      rgba(
+        0,
+        0,
+        0,
+        0.52
+      )
+      100%
 
-        --room-h:
-          620px;
+    );
 
-        --depth:
-          720px;
+}
 
-      }
 
+/* =================================
+   MOBILE
+================================= */
 
-      .scene {
+@media
+(max-width: 700px) {
 
-        perspective:
-          340px;
+  :root {
 
-      }
+    --room-width:
+      950px;
 
-    }
+    --room-height:
+      650px;
 
+    --depth:
+      780px;
 
-  </style>
+  }
+
+
+  .scene {
+
+    perspective:
+      280px;
+
+  }
+
+}
+
+</style>
 
 </head>
 
@@ -598,879 +633,948 @@
 <body>
 
 
-  <main
-    class="scene"
-    id="scene"
+<main
+  class="scene"
+  id="scene"
+>
+
+
+  <div
+    class="room"
+    id="room"
   >
 
 
-    <div
-      class="room"
-      id="room"
+    <!-- FRONT WALL -->
+
+    <section
+      class="face back"
     >
 
+      <div
+        class="surface"
+      ></div>
 
-      <!-- FRONT WALL -->
+    </section>
 
-      <section
-        class="face back"
-      >
 
-        <div
-          class="surface"
-          data-face="0"
-        ></div>
 
-      </section>
+    <!-- FLOOR -->
 
+    <section
+      class="face floor"
+    >
 
-      <!-- FLOOR -->
+      <div
+        class="surface"
+      ></div>
 
-      <section
-        class="face floor"
-      >
+    </section>
 
-        <div
-          class="surface"
-          data-face="1"
-        ></div>
 
-      </section>
 
+    <!-- CEILING -->
 
-      <!-- CEILING -->
+    <section
+      class="face ceiling"
+    >
 
-      <section
-        class="face ceiling"
-      >
+      <div
+        class="surface"
+      ></div>
 
-        <div
-          class="surface"
-          data-face="2"
-        ></div>
+    </section>
 
-      </section>
 
 
-      <!-- LEFT WALL -->
+    <!-- LEFT -->
 
-      <section
-        class="face left"
-      >
+    <section
+      class="face left"
+    >
 
-        <div
-          class="surface"
-          data-face="3"
-        ></div>
+      <div
+        class="surface"
+      ></div>
 
-      </section>
+    </section>
 
 
-      <!-- RIGHT WALL -->
 
-      <section
-        class="face right"
-      >
+    <!-- RIGHT -->
 
-        <div
-          class="surface"
-          data-face="4"
-        ></div>
+    <section
+      class="face right"
+    >
 
-      </section>
+      <div
+        class="surface"
+      ></div>
 
+    </section>
 
-    </div>
 
+  </div>
 
-    <div
-      class="vignette"
-    ></div>
 
+  <div
+    class="vignette"
+  ></div>
 
-  </main>
 
+</main>
 
 
-  <script>
 
+<script>
 
-    /* ============================
-       WORDS
-    ============================ */
 
-    const words = [
+/* =================================
+   WORD LIST
+================================= */
 
-      "CREATE",
+const words = [
 
-      "MOTION",
+  "CREATE",
 
-      "DESIGN",
+  "MOTION",
 
-      "EXPLORE",
+  "DESIGN",
 
-      "IMAGINE",
+  "EXPLORE",
 
-      "SYSTEMS"
+  "REEL",
 
-    ];
+  "SHOW"
 
+];
 
-    const scene =
-      document.getElementById(
-        "scene"
-      );
 
+const scene =
+  document.getElementById(
+    "scene"
+  );
 
-    const room =
-      document.getElementById(
-        "room"
-      );
 
+const room =
+  document.getElementById(
+    "room"
+  );
 
-    const surfaces = [
 
-      ...document.querySelectorAll(
-        ".surface"
-      )
+const surfaces = [
 
-    ];
+  ...document.querySelectorAll(
+    ".surface"
+  )
 
+];
 
-    const maxLetters =
 
-      Math.max(
+const maxLetters =
 
-        ...words.map(
-          word =>
-            word.length
-        )
+  Math.max(
 
-      );
+    ...words.map(
+      word =>
+        word.length
+    )
 
+  );
 
-    const glyphs = [];
 
+const glyphs = [];
 
 
-    /* ============================
-       CHARACTER HELPER
-    ============================ */
 
-    function setCharacter(
-      element,
-      character
-    ) {
+/* =================================
+   CHARACTER SETTER
+================================= */
 
-      element.textContent =
+function setCharacter(
 
-        character ||
+  element,
 
-        "\u00A0";
+  character
 
-    }
+) {
 
+  element.textContent =
 
+    character ||
 
-    /* ============================
-       CREATE LETTER
-    ============================ */
+    "\u00A0";
 
-    function createGlyph(
+}
 
-      character,
 
-      letterIndex,
 
-      rowIndex,
+/* =================================
+   CREATE GLYPH
+================================= */
 
+function createGlyph(
+
+  char,
+
+  letterIndex,
+
+  rowIndex,
+
+  faceIndex
+
+) {
+
+
+  const glyph =
+    document.createElement(
+      "span"
+    );
+
+
+  glyph.className =
+    "glyph";
+
+
+  const echo =
+    document.createElement(
+      "span"
+    );
+
+
+  echo.className =
+    "glyph-layer echo";
+
+
+  const front =
+    document.createElement(
+      "span"
+    );
+
+
+  front.className =
+    "glyph-layer front";
+
+
+  setCharacter(
+    echo,
+    char
+  );
+
+
+  setCharacter(
+    front,
+    char
+  );
+
+
+  glyph.appendChild(
+    echo
+  );
+
+
+  glyph.appendChild(
+    front
+  );
+
+
+  glyphs.push({
+
+    glyph,
+
+    echo,
+
+    front,
+
+    letterIndex,
+
+    rowIndex,
+
+    faceIndex
+
+  });
+
+
+  return glyph;
+
+}
+
+
+
+/* =================================
+   BUILD FACE TEXT
+================================= */
+
+function buildRoom() {
+
+
+  surfaces.forEach(
+
+    (
+      surface,
       faceIndex
-
-    ) {
-
-
-      const glyph =
-        document.createElement(
-          "span"
-        );
-
-
-      glyph.className =
-        "glyph";
-
-
-
-      /* ORANGE BACK CHARACTER */
-
-      const trail =
-        document.createElement(
-          "span"
-        );
-
-
-      trail.className =
-        "glyph-layer trail";
-
-
-
-      /* WHITE FRONT CHARACTER */
-
-      const front =
-        document.createElement(
-          "span"
-        );
-
-
-      front.className =
-        "glyph-layer front";
-
-
-
-      setCharacter(
-        trail,
-        character
-      );
-
-
-      setCharacter(
-        front,
-        character
-      );
+    ) => {
 
 
       /*
-        Orange FIRST,
-        white SECOND.
-
-        White therefore completely
-        covers orange when identical.
+        FOUR LARGE WORDS
       */
 
-      glyph.appendChild(
-        trail
-      );
+      for (
 
+        let rowIndex = 0;
 
-      glyph.appendChild(
-        front
-      );
+        rowIndex < 4;
 
+        rowIndex++
 
-      glyphs.push({
+      ) {
 
-        letterIndex,
 
-        rowIndex,
+        const row =
+          document.createElement(
+            "div"
+          );
 
-        faceIndex,
 
-        trail,
+        row.className =
+          "text-row";
 
-        front
 
-      });
+        const word =
+          document.createElement(
+            "div"
+          );
 
 
-      return glyph;
+        word.className =
+          "word";
 
-    }
 
+        for (
 
+          let i = 0;
 
-    /* ============================
-       BUILD ROOM
-    ============================ */
+          i < maxLetters;
 
-    function buildRoom() {
+          i++
 
+        ) {
 
-      surfaces.forEach(
 
-        (
-          surface,
-          faceIndex
-        ) => {
+          const char =
 
-
-          /*
-            EXACTLY FOUR WORDS
-          */
-
-          for (
-
-            let rowIndex = 0;
-
-            rowIndex < 4;
-
-            rowIndex++
-
-          ) {
-
-
-            const row =
-              document.createElement(
-                "div"
-              );
-
-
-            row.className =
-              "text-row";
-
-
-
-            const token =
-              document.createElement(
-                "span"
-              );
-
-
-            token.className =
-              "word-token";
-
-
-
-            for (
-
-              let letterIndex = 0;
-
-              letterIndex < maxLetters;
-
-              letterIndex++
-
-            ) {
-
-
-              const character =
-
-                words[0][
-                  letterIndex
-                ]
-
-                ||
-
-                " ";
-
-
-
-              token.appendChild(
-
-                createGlyph(
-
-                  character,
-
-                  letterIndex,
-
-                  rowIndex,
-
-                  faceIndex
-
-                )
-
-              );
-
-            }
-
-
-            row.appendChild(
-              token
-            );
-
-
-            surface.appendChild(
-              row
-            );
-
-          }
-
-        }
-
-      );
-
-
-      requestAnimationFrame(
-        fitTypography
-      );
-
-    }
-
-
-
-    /* ============================
-       FIT WORD TO FACE
-    ============================ */
-
-    function fitTypography() {
-
-
-      const rows =
-        document.querySelectorAll(
-          ".text-row"
-        );
-
-
-      rows.forEach(
-        row => {
-
-
-          const token =
-            row.querySelector(
-              ".word-token"
-            );
-
-
-          if (!token) return;
-
-
-
-          token.style.transform =
-            "scaleX(1)";
-
-
-
-          const rowHeight =
-            row.clientHeight;
-
-
-
-          /*
-            Larger vertically than
-            previous version.
-          */
-
-          row.style.fontSize =
-
-            (
-              rowHeight
-              *
-              1.22
-            )
-
-            +
-            "px";
-
-
-
-          const naturalWidth =
-            token.scrollWidth;
-
-
-          /*
-            Fill essentially the
-            complete wall width.
-          */
-
-          const availableWidth =
-            row.clientWidth
-            *
-            0.985;
-
-
-
-          if (
-            naturalWidth > 0
-          ) {
-
-
-            const scaleX =
-
-              availableWidth
-
-              /
-
-              naturalWidth;
-
-
-
-            token.style.transform =
-
-              `scaleX(${scaleX})`;
-
-          }
-
-        }
-
-      );
-
-    }
-
-
-
-    /* ============================
-       WORD CHANGE
-    ============================ */
-
-    function changeWord(
-      word
-    ) {
-
-
-      glyphs.forEach(
-        item => {
-
-
-          const character =
-
-            word[
-              item.letterIndex
-            ]
+            words[0][i]
 
             ||
 
             " ";
 
 
+          word.appendChild(
 
-          /*
-            Temporal displacement
-            across characters,
-            rows and surfaces.
-          */
+            createGlyph(
 
-          const stagger =
+              char,
 
-            item.letterIndex
-            * 42
+              i,
 
-            +
+              rowIndex,
 
-            item.rowIndex
-            * 90
+              faceIndex
 
-            +
-
-            item.faceIndex
-            * 28;
-
-
-
-          /*
-            WHITE CHARACTER CHANGES FIRST.
-
-            Orange still contains the OLD
-            character underneath it.
-
-            Parts of that old orange letter
-            become visible around the new
-            white letter shape.
-          */
-
-          setTimeout(
-
-            () => {
-
-              setCharacter(
-                item.front,
-                character
-              );
-
-            },
-
-            stagger
-
-          );
-
-
-
-          /*
-            ORANGE CATCHES UP AFTERWARD.
-
-            Once both characters match again,
-            orange disappears completely
-            behind white.
-          */
-
-          setTimeout(
-
-            () => {
-
-              setCharacter(
-                item.trail,
-                character
-              );
-
-            },
-
-            stagger + 150
+            )
 
           );
 
         }
 
-      );
 
+        row.appendChild(
+          word
+        );
+
+
+        surface.appendChild(
+          row
+        );
+
+      }
+
+    }
+
+  );
+
+
+  requestAnimationFrame(
+    fitWords
+  );
+
+}
+
+
+
+/* =================================
+   FIT WORDS TO ENTIRE FACE
+================================= */
+
+function fitWords() {
+
+
+  document
+    .querySelectorAll(
+      ".text-row"
+    )
+    .forEach(
+      row => {
+
+
+        const word =
+          row.querySelector(
+            ".word"
+          );
+
+
+        if (!word) return;
+
+
+        word.style.transform =
+          "scaleX(1)";
+
+
+        const rowHeight =
+          row.clientHeight;
+
+
+        /*
+          Very tall typography.
+        */
+
+        row.style.fontSize =
+
+          (
+            rowHeight
+            *
+            1.32
+          )
+
+          +
+          "px";
+
+
+        const naturalWidth =
+          word.scrollWidth;
+
+
+        const availableWidth =
+          row.clientWidth
+          *
+          1.04;
+
+
+        if (
+          naturalWidth > 0
+        ) {
+
+
+          const scaleX =
+
+            availableWidth
+
+            /
+
+            naturalWidth;
+
+
+          word.style.transform =
+
+            `scaleX(${scaleX})`;
+
+        }
+
+      }
+
+    );
+
+}
+
+
+
+/* =================================
+   WORD CHANGE
+================================= */
+
+function changeWord(
+  word
+) {
+
+
+  glyphs.forEach(
+    item => {
+
+
+      const nextChar =
+
+        word[
+          item.letterIndex
+        ]
+
+        ||
+
+        " ";
 
 
       /*
-        Refit typography after
-        different length words.
+        Propagation across the room.
+
+        Top-left characters change
+        before bottom-right characters.
+      */
+
+      const stagger =
+
+        item.letterIndex
+        *
+        34
+
+        +
+
+        item.rowIndex
+        *
+        75
+
+        +
+
+        item.faceIndex
+        *
+        28;
+
+
+      /*
+        START ORANGE MOTION SMEAR
       */
 
       setTimeout(
 
         () => {
 
-          requestAnimationFrame(
-            fitTypography
+          item.glyph
+            .classList
+            .add(
+              "motion"
+            );
+
+
+          /*
+            White becomes new letter.
+
+            Orange still holds old letter.
+          */
+
+          setCharacter(
+
+            item.front,
+
+            nextChar
+
           );
 
         },
 
-        650
+        stagger
+
+      );
+
+
+      /*
+        ORANGE CATCHES UP
+      */
+
+      setTimeout(
+
+        () => {
+
+
+          setCharacter(
+
+            item.echo,
+
+            nextChar
+
+          );
+
+
+          item.glyph
+            .classList
+            .remove(
+              "motion"
+            );
+
+
+        },
+
+        stagger
+        +
+        150
 
       );
 
     }
 
+  );
 
 
-    /* ============================
-       INITIAL BUILD
-    ============================ */
+  /*
+    Refit when switching
+    between REEL / EXPLORE etc.
+  */
 
-    buildRoom();
+  setTimeout(
+
+    () => {
+
+      requestAnimationFrame(
+        fitWords
+      );
+
+    },
+
+    650
+
+  );
+
+}
 
 
 
-    window.addEventListener(
+/* =================================
+   INITIAL BUILD
+================================= */
 
-      "resize",
+buildRoom();
 
-      () => {
 
-        requestAnimationFrame(
-          fitTypography
-        );
 
-      }
+window.addEventListener(
+
+  "resize",
+
+  () => {
+
+    requestAnimationFrame(
+      fitWords
+    );
+
+  }
+
+);
+
+
+
+/* =================================
+   AUTOMATIC WORD CYCLE
+================================= */
+
+let wordIndex = 0;
+
+
+setInterval(
+
+  () => {
+
+
+    wordIndex =
+
+      (
+        wordIndex
+        +
+        1
+      )
+
+      %
+
+      words.length;
+
+
+    changeWord(
+
+      words[
+        wordIndex
+      ]
 
     );
 
+  },
 
+  1800
 
-    /* ============================
-       AUTOMATIC WORD CHANGES
-    ============================ */
-
-    let wordIndex = 0;
-
-
-    setInterval(
-
-      () => {
-
-
-        wordIndex =
-
-          (
-            wordIndex + 1
-          )
-
-          %
-
-          words.length;
+);
 
 
 
-        changeWord(
+/* =================================
+   CAMERA
+================================= */
 
-          words[
-            wordIndex
-          ]
-
-        );
-
-      },
-
-      2100
-
-    );
+let targetX = 0;
+let targetY = 0;
 
 
-
-    /* ============================
-       CURSOR CAMERA
-
-       DIRECT mapping.
-
-       No easing/inertia.
-
-       The front wall therefore
-       follows cursor movement
-       immediately.
-    ============================ */
-
-    function moveCamera(
-      clientX,
-      clientY
-    ) {
+let currentX = 0;
+let currentY = 0;
 
 
-      const rect =
+/*
+  Vanishing point
+*/
 
-        scene
-          .getBoundingClientRect();
+let targetOriginX = 50;
+let targetOriginY = 50;
+
+
+let currentOriginX = 50;
+let currentOriginY = 50;
 
 
 
-      /*
-        Convert pointer to:
+scene.addEventListener(
 
-        -1 → left/top
-         0 → center
-        +1 → right/bottom
-      */
+  "pointermove",
 
-      const x =
+  event => {
 
+
+    const rect =
+      scene
+        .getBoundingClientRect();
+
+
+    /*
+      -1 → +1
+    */
+
+    const x =
+
+      (
         (
-          (
-            clientX
-            -
-            rect.left
-          )
-
-          /
-
-          rect.width
-
+          event.clientX
+          -
+          rect.left
         )
 
-        * 2
+        /
 
-        - 1;
+        rect.width
+
+      )
+
+      *
+      2
+
+      -
+      1;
 
 
+    const y =
 
-      const y =
-
+      (
         (
-          (
-            clientY
-            -
-            rect.top
-          )
-
-          /
-
-          rect.height
-
-        )
-
-        * 2
-
-        - 1;
-
-
-
-      /*
-        More exaggerated angles.
-
-        Increase these later if you
-        want an even more aggressive
-        fisheye feeling.
-      */
-
-      const yaw =
-        x * 19;
-
-
-      const pitch =
-        -y * 13;
-
-
-
-      room.style.transform = `
-
-        translate3d(
-          -50%,
-          -50%,
-          100px
-        )
-
-        rotateX(
-          ${pitch}deg
-        )
-
-        rotateY(
-          ${yaw}deg
-        )
-
-      `;
-
-    }
-
-
-
-    scene.addEventListener(
-
-      "pointermove",
-
-      event => {
-
-        moveCamera(
-
-          event.clientX,
-
           event.clientY
+          -
+          rect.top
+        )
 
-        );
+        /
 
-      }
+        rect.height
 
-    );
+      )
+
+      *
+      2
+
+      -
+      1;
 
 
 
     /*
-      Return to centre when cursor
-      leaves the experiment.
+      CAMERA ROTATION
+
+      Exaggerated like the reference.
     */
 
-    scene.addEventListener(
-
-      "pointerleave",
-
-      () => {
+    targetX =
+      x * 27;
 
 
-        room.style.transition =
-          "transform 500ms cubic-bezier(0.22, 1, 0.36, 1)";
+    targetY =
+      -y * 21;
 
 
-        room.style.transform = `
 
-          translate3d(
-            -50%,
-            -50%,
-            100px
-          )
+    /*
+      VANISHING POINT
 
-          rotateX(0deg)
+      This is the major difference.
 
-          rotateY(0deg)
+      Perspective now physically follows
+      the cursor across the viewport.
+    */
 
-        `;
+    targetOriginX =
 
+      50
 
-        setTimeout(
+      +
 
-          () => {
-
-            room.style.transition =
-              "none";
-
-          },
-
-          500
-
-        );
-
-      }
-
-    );
+      x * 30;
 
 
-  </script>
+    targetOriginY =
+
+      50
+
+      +
+
+      y * 30;
+
+  }
+
+);
+
+
+
+scene.addEventListener(
+
+  "pointerleave",
+
+  () => {
+
+
+    targetX = 0;
+
+    targetY = 0;
+
+
+    targetOriginX = 50;
+
+    targetOriginY = 50;
+
+  }
+
+);
+
+
+
+/* =================================
+   CAMERA LOOP
+================================= */
+
+function animateCamera() {
+
+
+  /*
+    Small amount of easing.
+
+    Still responsive but not jittery.
+  */
+
+  currentX +=
+
+    (
+      targetX
+      -
+      currentX
+    )
+
+    *
+    0.11;
+
+
+  currentY +=
+
+    (
+      targetY
+      -
+      currentY
+    )
+
+    *
+    0.11;
+
+
+
+  currentOriginX +=
+
+    (
+      targetOriginX
+      -
+      currentOriginX
+    )
+
+    *
+    0.13;
+
+
+  currentOriginY +=
+
+    (
+      targetOriginY
+      -
+      currentOriginY
+    )
+
+    *
+    0.13;
+
+
+
+  /*
+    MOVE PERSPECTIVE ORIGIN
+  */
+
+  scene.style.perspectiveOrigin =
+
+    `${currentOriginX}% ${currentOriginY}%`;
+
+
+
+  /*
+    ROTATE ROOM
+  */
+
+  room.style.transform = `
+
+    translate3d(
+      -50%,
+      -50%,
+      80px
+    )
+
+    rotateX(
+      ${currentY}deg
+    )
+
+    rotateY(
+      ${currentX}deg
+    )
+
+  `;
+
+
+
+  requestAnimationFrame(
+    animateCamera
+  );
+
+}
+
+
+animateCamera();
+
+
+</script>
 
 
 </body>
