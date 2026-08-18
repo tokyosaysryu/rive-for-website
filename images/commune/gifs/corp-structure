@@ -1,0 +1,653 @@
+<link
+  href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
+  rel="stylesheet"
+>
+
+<div class="org-chart">
+
+  <!-- CEO -->
+  <div class="org-level level-ceo">
+
+    <div class="org-card org-card-dark">
+      CEO
+    </div>
+
+  </div>
+
+
+  <!-- CONNECTOR -->
+  <div class="connector connector-main">
+    <span class="vertical-line"></span>
+  </div>
+
+
+  <!-- C-SUITE -->
+  <div class="org-level level-csuite">
+
+    <div class="horizontal-line"></div>
+
+    <div class="org-card">CTO</div>
+    <div class="org-card">CFO</div>
+    <div class="org-card">CMO</div>
+    <div class="org-card">CDO</div>
+    <div class="org-card">CPO</div>
+
+  </div>
+
+
+  <!-- SECOND CONNECTOR -->
+  <div class="connector connector-departments">
+
+    <span class="vertical-line"></span>
+
+  </div>
+
+
+  <!-- DEPARTMENTS -->
+  <div class="org-level level-departments">
+
+    <div class="horizontal-line"></div>
+
+    <div class="org-card department">
+      MARKETING DEP.
+    </div>
+
+    <div class="org-card department">
+      PRODUCT DEP.
+    </div>
+
+    <div class="org-card department">
+      DESIGN DEP.
+    </div>
+
+    <div class="org-card department">
+      SALES DEP.
+    </div>
+
+    <div class="org-card department">
+      CORPORATE &amp; PR
+    </div>
+
+    <div class="org-card department">
+      INTERNAL &amp; HR
+    </div>
+
+  </div>
+
+</div>
+
+
+<style>
+
+  * {
+    box-sizing: border-box;
+  }
+
+
+  body {
+    margin: 0;
+
+    font-family:
+      "Montserrat",
+      sans-serif;
+  }
+
+
+  .org-chart {
+    width: 100%;
+
+    padding: 48px 24px 56px;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    color: #111111;
+  }
+
+
+  /* -------------------------
+     LEVELS
+  ------------------------- */
+
+  .org-level {
+    position: relative;
+
+    width: 100%;
+
+    display: grid;
+
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  .level-ceo {
+    display: flex;
+
+    justify-content: center;
+  }
+
+
+  .level-csuite {
+    grid-template-columns:
+      repeat(5, minmax(100px, 1fr));
+
+    gap: 16px;
+
+    max-width: 960px;
+
+    margin: 0 auto;
+  }
+
+
+  .level-departments {
+    grid-template-columns:
+      repeat(6, minmax(110px, 1fr));
+
+    gap: 16px;
+
+    max-width: 1180px;
+
+    margin: 0 auto;
+  }
+
+
+  /* -------------------------
+     CARDS
+  ------------------------- */
+
+  .org-card {
+    position: relative;
+
+    z-index: 2;
+
+    min-height: 54px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 14px 18px;
+
+    border: 1px solid #dddddd;
+    border-radius: 999px;
+
+    background: #ffffff;
+
+    font-family:
+      "Montserrat",
+      sans-serif;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    letter-spacing: 0.03em;
+
+    text-align: center;
+
+    opacity: 0;
+
+    transform:
+      translateY(12px);
+
+    transition:
+      opacity 0.45s ease,
+      transform 0.45s ease,
+      background 0.25s ease,
+      color 0.25s ease;
+  }
+
+
+  .org-card-dark {
+    min-width: 140px;
+
+    background: #111111;
+
+    border-color: #111111;
+
+    color: #ffffff;
+  }
+
+
+  .department {
+    border-radius: 16px;
+
+    min-height: 74px;
+
+    padding: 16px;
+  }
+
+
+  /* -------------------------
+     CONNECTORS
+  ------------------------- */
+
+  .connector {
+    position: relative;
+
+    height: 64px;
+
+    display: flex;
+
+    justify-content: center;
+
+    overflow: hidden;
+  }
+
+
+  .vertical-line {
+    display: block;
+
+    width: 1px;
+
+    height: 100%;
+
+    background: #cfcfcf;
+
+    transform:
+      scaleY(0);
+
+    transform-origin:
+      top;
+
+    transition:
+      transform 0.45s ease;
+  }
+
+
+  .horizontal-line {
+    position: absolute;
+
+    top: -33px;
+
+    left: 10%;
+    right: 10%;
+
+    height: 1px;
+
+    background: #cfcfcf;
+
+    transform:
+      scaleX(0);
+
+    transform-origin:
+      center;
+
+    transition:
+      transform 0.55s ease;
+  }
+
+
+  /* SMALL DOWNSTROKES */
+
+  .level-csuite .org-card::before,
+  .level-departments .org-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    top: -33px;
+
+    width: 1px;
+    height: 33px;
+
+    background: #cfcfcf;
+
+    transform:
+      scaleY(0);
+
+    transform-origin:
+      top;
+
+    transition:
+      transform 0.4s ease;
+  }
+
+
+  /* -------------------------
+     ACTIVE STATES
+  ------------------------- */
+
+  .org-chart.phase-ceo
+  .level-ceo
+  .org-card {
+
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+
+  .org-chart.phase-csuite
+  .connector-main
+  .vertical-line {
+
+    transform:
+      scaleY(1);
+  }
+
+
+  .org-chart.phase-csuite
+  .level-csuite
+  .horizontal-line {
+
+    transform:
+      scaleX(1);
+  }
+
+
+  .org-chart.phase-csuite
+  .level-csuite
+  .org-card::before {
+
+    transform:
+      scaleY(1);
+  }
+
+
+  .org-chart.phase-csuite
+  .level-csuite
+  .org-card {
+
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+
+  .org-chart.phase-departments
+  .connector-departments
+  .vertical-line {
+
+    transform:
+      scaleY(1);
+  }
+
+
+  .org-chart.phase-departments
+  .level-departments
+  .horizontal-line {
+
+    transform:
+      scaleX(1);
+  }
+
+
+  .org-chart.phase-departments
+  .level-departments
+  .org-card::before {
+
+    transform:
+      scaleY(1);
+  }
+
+
+  .org-chart.phase-departments
+  .level-departments
+  .org-card {
+
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+
+  /* -------------------------
+     STAGGER C-SUITE
+  ------------------------- */
+
+  .level-csuite
+  .org-card:nth-of-type(2) {
+    transition-delay: 0.06s;
+  }
+
+
+  .level-csuite
+  .org-card:nth-of-type(3) {
+    transition-delay: 0.12s;
+  }
+
+
+  .level-csuite
+  .org-card:nth-of-type(4) {
+    transition-delay: 0.18s;
+  }
+
+
+  .level-csuite
+  .org-card:nth-of-type(5) {
+    transition-delay: 0.24s;
+  }
+
+
+  .level-csuite
+  .org-card:nth-of-type(6) {
+    transition-delay: 0.30s;
+  }
+
+
+  /* -------------------------
+     STAGGER DEPARTMENTS
+  ------------------------- */
+
+  .level-departments
+  .org-card:nth-of-type(2) {
+    transition-delay: 0.05s;
+  }
+
+
+  .level-departments
+  .org-card:nth-of-type(3) {
+    transition-delay: 0.10s;
+  }
+
+
+  .level-departments
+  .org-card:nth-of-type(4) {
+    transition-delay: 0.15s;
+  }
+
+
+  .level-departments
+  .org-card:nth-of-type(5) {
+    transition-delay: 0.20s;
+  }
+
+
+  .level-departments
+  .org-card:nth-of-type(6) {
+    transition-delay: 0.25s;
+  }
+
+
+  .level-departments
+  .org-card:nth-of-type(7) {
+    transition-delay: 0.30s;
+  }
+
+
+  /* -------------------------
+     MOBILE
+  ------------------------- */
+
+  @media (max-width: 900px) {
+
+    .level-csuite {
+      grid-template-columns:
+        repeat(2, minmax(120px, 1fr));
+
+      max-width: 560px;
+    }
+
+
+    .level-departments {
+      grid-template-columns:
+        repeat(2, minmax(130px, 1fr));
+
+      max-width: 620px;
+    }
+
+
+    .horizontal-line,
+    .org-card::before {
+      display: none;
+    }
+
+
+    .connector {
+      height: 40px;
+    }
+
+  }
+
+
+  @media (max-width: 520px) {
+
+    .org-chart {
+      padding:
+        36px 16px 44px;
+    }
+
+
+    .level-csuite,
+    .level-departments {
+
+      grid-template-columns:
+        1fr;
+
+      max-width: 100%;
+    }
+
+
+    .org-card {
+      width: 100%;
+    }
+
+  }
+
+</style>
+
+
+<script>
+
+(function () {
+
+  const chart =
+    document.querySelector(
+      ".org-chart"
+    );
+
+
+  if (!chart) {
+    return;
+  }
+
+
+  const sleep =
+    (duration) =>
+      new Promise(
+        resolve =>
+          setTimeout(
+            resolve,
+            duration
+          )
+      );
+
+
+  async function playAnimation() {
+
+    while (true) {
+
+
+      /* RESET */
+
+      chart.classList.remove(
+        "phase-ceo",
+        "phase-csuite",
+        "phase-departments"
+      );
+
+
+      await sleep(500);
+
+
+
+      /* CEO */
+
+      chart.classList.add(
+        "phase-ceo"
+      );
+
+
+      await sleep(750);
+
+
+
+      /* C-SUITE */
+
+      chart.classList.add(
+        "phase-csuite"
+      );
+
+
+      await sleep(1100);
+
+
+
+      /* DEPARTMENTS */
+
+      chart.classList.add(
+        "phase-departments"
+      );
+
+
+      /*
+        Hold completed chart
+      */
+
+      await sleep(2600);
+
+
+
+      /*
+        Fade out before restart
+      */
+
+      chart.classList.remove(
+        "phase-departments"
+      );
+
+
+      await sleep(350);
+
+
+      chart.classList.remove(
+        "phase-csuite"
+      );
+
+
+      await sleep(300);
+
+
+      chart.classList.remove(
+        "phase-ceo"
+      );
+
+
+      await sleep(700);
+
+    }
+
+  }
+
+
+  playAnimation();
+
+})();
+</script>
