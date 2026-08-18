@@ -1,0 +1,1224 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Corporate Structure</title>
+
+
+<link
+  rel="preconnect"
+  href="https://fonts.googleapis.com"
+>
+
+<link
+  rel="preconnect"
+  href="https://fonts.gstatic.com"
+  crossorigin
+>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
+  rel="stylesheet"
+>
+
+
+<style>
+
+:root {
+
+  --bg: #f7f7f5;
+
+  --card: #ffffff;
+
+  --text: #111111;
+
+  --muted: #777777;
+
+  --line: #cfcfcf;
+
+  --border: #dcdcdc;
+
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+
+html,
+body {
+
+  margin: 0;
+
+  width: 100%;
+  height: 100%;
+
+}
+
+
+body {
+
+  background:
+    var(--bg);
+
+  font-family:
+    "Montserrat",
+    sans-serif;
+
+  color:
+    var(--text);
+
+}
+
+
+/* =========================
+   VIEWPORT
+========================= */
+
+.org-wrapper {
+
+  position: relative;
+
+  width: 100%;
+
+  min-height: 650px;
+
+  overflow: hidden;
+
+  background:
+    var(--bg);
+
+}
+
+
+/*
+  Internal canvas.
+
+  We keep it wide so the
+  structure stays elegant.
+*/
+
+.org-chart {
+
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 1200px;
+  height: 650px;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+}
+
+
+/* =========================
+   CONNECTION LINES
+========================= */
+
+.connections {
+
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  pointer-events: none;
+
+  overflow: visible;
+
+}
+
+
+.connection {
+
+  fill: none;
+
+  stroke:
+    var(--line);
+
+  stroke-width: 1.5;
+
+  stroke-linecap:
+    round;
+
+  stroke-linejoin:
+    round;
+
+
+  /*
+    Initially hidden.
+  */
+
+  stroke-dasharray: 1500;
+
+  stroke-dashoffset: 1500;
+
+}
+
+
+/* =========================
+   NODES
+========================= */
+
+.node {
+
+  position: absolute;
+
+  width: 160px;
+
+  min-height: 82px;
+
+  padding:
+    16px 14px;
+
+
+  display: flex;
+
+  flex-direction:
+    column;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+
+  background:
+    var(--card);
+
+
+  border:
+    1px solid
+    var(--border);
+
+
+  border-radius:
+    16px;
+
+
+  text-align:
+    center;
+
+
+  opacity: 0;
+
+
+  transform:
+
+    translateY(12px)
+
+    scale(0.96);
+
+
+  box-shadow:
+
+    0 4px 18px
+
+    rgba(
+      0,
+      0,
+      0,
+      0.025
+    );
+
+
+  will-change:
+    transform,
+    opacity;
+
+}
+
+
+.node-role {
+
+  font-size:
+    11px;
+
+  line-height:
+    1.2;
+
+  font-weight:
+    500;
+
+  letter-spacing:
+    0.06em;
+
+  color:
+    var(--muted);
+
+  text-transform:
+    uppercase;
+
+  margin-bottom:
+    7px;
+
+}
+
+
+.node-title {
+
+  font-size:
+    16px;
+
+  line-height:
+    1.2;
+
+  font-weight:
+    600;
+
+}
+
+
+/* =========================
+   CEO
+========================= */
+
+.ceo {
+
+  width:
+    190px;
+
+  min-height:
+    92px;
+
+
+  left:
+    505px;
+
+  top:
+    35px;
+
+
+  background:
+    #111111;
+
+  color:
+    #ffffff;
+
+
+  border-color:
+    #111111;
+
+}
+
+
+.ceo .node-role {
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.58
+    );
+
+}
+
+
+/* =========================
+   C-SUITE POSITIONS
+========================= */
+
+.exec-1 {
+  left: 20px;
+  top: 220px;
+}
+
+
+.exec-2 {
+  left: 220px;
+  top: 220px;
+}
+
+
+.exec-3 {
+  left: 420px;
+  top: 220px;
+}
+
+
+.exec-4 {
+  left: 620px;
+  top: 220px;
+}
+
+
+.exec-5 {
+  left: 820px;
+  top: 220px;
+}
+
+
+.exec-6 {
+  left: 1020px;
+  top: 220px;
+}
+
+
+/* =========================
+   DEPARTMENT POSITIONS
+========================= */
+
+.dept {
+
+  width:
+    170px;
+
+  min-height:
+    82px;
+
+}
+
+
+.dept-1 {
+  left: 15px;
+  top: 510px;
+}
+
+
+.dept-2 {
+  left: 215px;
+  top: 510px;
+}
+
+
+.dept-3 {
+  left: 415px;
+  top: 510px;
+}
+
+
+.dept-4 {
+  left: 615px;
+  top: 510px;
+}
+
+
+.dept-5 {
+  left: 815px;
+  top: 510px;
+}
+
+
+.dept-6 {
+  left: 1015px;
+  top: 510px;
+}
+
+
+/* =========================
+   ANIMATION
+========================= */
+
+/*
+  CEO
+*/
+
+.org-chart.play .ceo {
+
+  animation:
+
+    nodeReveal
+    0.55s
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    )
+
+    0.2s
+
+    forwards;
+
+}
+
+
+/*
+  CEO connector
+*/
+
+.org-chart.play
+.line-ceo {
+
+  animation:
+
+    drawLine
+    0.8s
+    ease
+
+    0.65s
+
+    forwards;
+
+}
+
+
+/*
+  EXECUTIVES
+*/
+
+.org-chart.play .exec-1 {
+
+  animation:
+    nodeReveal
+    0.5s
+    ease
+    1.15s
+    forwards;
+
+}
+
+
+.org-chart.play .exec-2 {
+
+  animation:
+    nodeReveal
+    0.5s
+    ease
+    1.25s
+    forwards;
+
+}
+
+
+.org-chart.play .exec-3 {
+
+  animation:
+    nodeReveal
+    0.5s
+    ease
+    1.35s
+    forwards;
+
+}
+
+
+.org-chart.play .exec-4 {
+
+  animation:
+    nodeReveal
+    0.5s
+    ease
+    1.45s
+    forwards;
+
+}
+
+
+.org-chart.play .exec-5 {
+
+  animation:
+    nodeReveal
+    0.5s
+    ease
+    1.55s
+    forwards;
+
+}
+
+
+.org-chart.play .exec-6 {
+
+  animation:
+    nodeReveal
+    0.5s
+    ease
+    1.65s
+    forwards;
+
+}
+
+
+/*
+  LOWER CONNECTORS
+*/
+
+.org-chart.play
+.line-departments {
+
+  animation:
+
+    drawLine
+    1s
+    ease
+
+    2s
+
+    forwards;
+
+}
+
+
+/*
+  DEPARTMENTS
+*/
+
+.org-chart.play .dept-1 {
+
+  animation:
+    nodeReveal
+    0.5s
+    ease
+    2.55s
+    forwards;
+
+}
+
+
+.org-chart.play .dept-2 {
+
+  animation:
+    nodeReveal
+    0.5s
+    ease
+    2.65s
+    forwards;
+
+}
+
+
+.org-chart.play .dept-3 {
+
+  animation:
+    nodeReveal
+    0.5s
+    ease
+    2.75s
+    forwards;
+
+}
+
+
+.org-chart.play .dept-4 {
+
+  animation:
+    nodeReveal
+    0.5s
+    ease
+    2.85s
+    forwards;
+
+}
+
+
+.org-chart.play .dept-5 {
+
+  animation:
+    nodeReveal
+    0.5s
+    ease
+    2.95s
+    forwards;
+
+}
+
+
+.org-chart.play .dept-6 {
+
+  animation:
+    nodeReveal
+    0.5s
+    ease
+    3.05s
+    forwards;
+
+}
+
+
+/* =========================
+   KEYFRAMES
+========================= */
+
+@keyframes nodeReveal {
+
+  0% {
+
+    opacity: 0;
+
+    transform:
+
+      translateY(12px)
+
+      scale(0.96);
+
+  }
+
+
+  100% {
+
+    opacity: 1;
+
+    transform:
+
+      translateY(0)
+
+      scale(1);
+
+  }
+
+}
+
+
+@keyframes drawLine {
+
+  from {
+
+    stroke-dashoffset:
+      1500;
+
+  }
+
+
+  to {
+
+    stroke-dashoffset:
+      0;
+
+  }
+
+}
+
+
+/* =========================
+   RESPONSIVE SCALE
+========================= */
+
+@media
+(max-width: 1200px) {
+
+  .org-chart {
+
+    transform:
+
+      translate(
+        -50%,
+        -50%
+      )
+
+      scale(0.82);
+
+  }
+
+}
+
+
+@media
+(max-width: 900px) {
+
+  .org-chart {
+
+    transform:
+
+      translate(
+        -50%,
+        -50%
+      )
+
+      scale(0.66);
+
+  }
+
+}
+
+
+@media
+(max-width: 650px) {
+
+  .org-wrapper {
+
+    min-height:
+      540px;
+
+  }
+
+
+  .org-chart {
+
+    transform:
+
+      translate(
+        -50%,
+        -50%
+      )
+
+      scale(0.48);
+
+  }
+
+}
+
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media
+(prefers-reduced-motion: reduce) {
+
+  .node {
+
+    opacity: 1;
+
+    transform:
+      none;
+
+  }
+
+
+  .connection {
+
+    stroke-dashoffset:
+      0;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+
+<body>
+
+
+<div class="org-wrapper">
+
+
+  <div
+    class="org-chart"
+    id="orgChart"
+  >
+
+
+    <!-- =====================
+         CONNECTING LINES
+    ====================== -->
+
+    <svg
+      class="connections"
+      viewBox="0 0 1200 650"
+      preserveAspectRatio="none"
+    >
+
+
+      <!--
+        CEO →
+        Executive tier
+      -->
+
+      <path
+        class="connection line-ceo"
+        d="
+          M 600 127
+
+          L 600 170
+
+          L 100 170
+
+          M 600 170
+          L 1100 170
+
+
+          M 100 170
+          L 100 220
+
+          M 300 170
+          L 300 220
+
+          M 500 170
+          L 500 220
+
+          M 700 170
+          L 700 220
+
+          M 900 170
+          L 900 220
+
+          M 1100 170
+          L 1100 220
+        "
+      />
+
+
+      <!--
+        Executive tier →
+        Department tier
+      -->
+
+      <path
+        class="
+          connection
+          line-departments
+        "
+        d="
+
+          M 100 302
+          L 100 380
+
+          M 300 302
+          L 300 380
+
+          M 500 302
+          L 500 380
+
+          M 700 302
+          L 700 380
+
+          M 900 302
+          L 900 380
+
+          M 1100 302
+          L 1100 380
+
+
+          M 100 380
+          L 1100 380
+
+
+          M 600 380
+          L 600 450
+
+
+          M 100 450
+          L 1100 450
+
+
+          M 100 450
+          L 100 510
+
+          M 300 450
+          L 300 510
+
+          M 500 450
+          L 500 510
+
+          M 700 450
+          L 700 510
+
+          M 900 450
+          L 900 510
+
+          M 1100 450
+          L 1100 510
+        "
+      />
+
+
+    </svg>
+
+
+
+    <!-- =====================
+         CEO
+    ====================== -->
+
+    <div
+      class="node ceo"
+    >
+
+      <div class="node-role">
+        Executive
+      </div>
+
+      <div class="node-title">
+        CEO
+      </div>
+
+    </div>
+
+
+
+    <!-- =====================
+         C-SUITE
+    ====================== -->
+
+    <div
+      class="node exec-1"
+    >
+
+      <div class="node-role">
+        Technology
+      </div>
+
+      <div class="node-title">
+        CTO
+      </div>
+
+    </div>
+
+
+
+    <div
+      class="node exec-2"
+    >
+
+      <div class="node-role">
+        Finance
+      </div>
+
+      <div class="node-title">
+        CFO
+      </div>
+
+    </div>
+
+
+
+    <div
+      class="node exec-3"
+    >
+
+      <div class="node-role">
+        Marketing
+      </div>
+
+      <div class="node-title">
+        CMO
+      </div>
+
+    </div>
+
+
+
+    <div
+      class="node exec-4"
+    >
+
+      <div class="node-role">
+        Design
+      </div>
+
+      <div class="node-title">
+        CDO
+      </div>
+
+    </div>
+
+
+
+    <div
+      class="node exec-5"
+    >
+
+      <div class="node-role">
+        Product
+      </div>
+
+      <div class="node-title">
+        CPO
+      </div>
+
+    </div>
+
+
+
+    <div
+      class="node exec-6"
+    >
+
+      <div class="node-role">
+        Operations
+      </div>
+
+      <div class="node-title">
+        COO
+      </div>
+
+    </div>
+
+
+
+    <!-- =====================
+         DEPARTMENTS
+    ====================== -->
+
+    <div
+      class="node dept dept-1"
+    >
+
+      <div class="node-role">
+        Department
+      </div>
+
+      <div class="node-title">
+        Marketing
+      </div>
+
+    </div>
+
+
+
+    <div
+      class="node dept dept-2"
+    >
+
+      <div class="node-role">
+        Department
+      </div>
+
+      <div class="node-title">
+        Product
+      </div>
+
+    </div>
+
+
+
+    <div
+      class="node dept dept-3"
+    >
+
+      <div class="node-role">
+        Department
+      </div>
+
+      <div class="node-title">
+        Design
+      </div>
+
+    </div>
+
+
+
+    <div
+      class="node dept dept-4"
+    >
+
+      <div class="node-role">
+        Department
+      </div>
+
+      <div class="node-title">
+        Sales
+      </div>
+
+    </div>
+
+
+
+    <div
+      class="node dept dept-5"
+    >
+
+      <div class="node-role">
+        Department
+      </div>
+
+      <div class="node-title">
+        Corporate & PR
+      </div>
+
+    </div>
+
+
+
+    <div
+      class="node dept dept-6"
+    >
+
+      <div class="node-role">
+        Department
+      </div>
+
+      <div class="node-title">
+        Internal & HR
+      </div>
+
+    </div>
+
+
+  </div>
+
+</div>
+
+
+
+<script>
+
+const chart =
+  document.getElementById(
+    "orgChart"
+  );
+
+
+/*
+  Each animation cycle lasts
+  around 7 seconds.
+
+  We remove and re-add the class
+  to restart all CSS animations.
+*/
+
+function playAnimation() {
+
+
+  chart.classList.remove(
+    "play"
+  );
+
+
+  /*
+    Force browser reflow
+  */
+
+  void chart.offsetWidth;
+
+
+  chart.classList.add(
+    "play"
+  );
+
+}
+
+
+/*
+  Initial animation
+*/
+
+playAnimation();
+
+
+/*
+  Loop
+*/
+
+setInterval(
+
+  playAnimation,
+
+  7000
+
+);
+
+</script>
+
+
+</body>
+
+</html>
